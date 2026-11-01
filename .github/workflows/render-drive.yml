@@ -1,0 +1,149 @@
+name: Render from Google Drive
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "draft = quick low-res preview + storyboard frames, final = full quality, uploaded to Drive"
+        type: choice
+        options: [draft, final]
+        default: draft
+      composition:
+        description: "Composition ID (must match id= in src/Root.tsx)"
+        required: true
+        default: "Demo1Hormozi"
+      drive_file_id:
+        description: "Google Drive file ID of the raw video"
+        required: true
+      output_folder_id:
+        description: "Drive folder ID where the final video is uploaded"
+        required: true
+        default: "1Qhi7BR7I5VqVyxVZhehMo6jWXUttJ8w_"
+      music_id:
+        description: "Mixkit music track number"
+        required: true
+        default: "1168"
+      name:
+        description: "Label for the output file name (no spaces)"
+        required: false
+        default: "demo1"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      MODE: ${{ github.event.inputs.mode }}
+      COMPOSITION: ${{ github.event.inputs.composition }}
+      FILE_ID: ${{ github.event.inputs.drive_file_id }}
+      OUT_FOLDER: ${{ github.event.inputs.output_folder_id }}
+      LABEL: ${{ github.event.inputs.name }}
+      RCLONE_CONFIG_GD_TYPE: drive
+      RCLONE_CONFIG_GD_SCOPE: drive
+      RCLONE_CONFIG_GD_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+      RCLONE_CONFIG_GD_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+      GD_RT: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Show machine
+        run: echo "CPUs: $(nproc)"; free -h
+
+      - name: Install ffmpeg and rclone
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg rclone
+
+      - name: Set up Drive login
+        run: |
+          RT=$(printf '%s' "$GD_RT" | tr -d '[:space:]"{}')
+          CID=$(printf '%s' "$RCLONE_CONFIG_GD_CLIENT_ID" | tr -d '[:space:]"')
+          CSEC=$(printf '%s' "$RCLONE_CONFIG_GD_CLIENT_SECRET" | tr -d '[:space:]"')
+          {
+            echo "RCLONE_CONFIG_GD_CLIENT_ID=$CID"
+            echo "RCLONE_CONFIG_GD_CLIENT_SECRET=$CSEC"
+            echo "RCLONE_CONFIG_GD_TOKEN={\"access_token\":\"\",\"token_type\":\"Bearer\",\"refresh_token\":\"$RT\",\"expiry\":\"2000-01-01T00:00:00Z\"}"
+          } >> "$GITHUB_ENV"
+
+      - name: Download the original video from Drive
+        run: |
+          mkdir -p public/video
+          rclone backend copyid GD: "$FILE_ID" public/video/input.mp4 --drive-acknowledge-abuse
+          ls -l public/video/input.mp4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download Remotion browser
+        run: npx remotion browser ensure
+
+      - name: Prepare sound files
+        env:
+          MUSIC_ID: ${{ github.event.inputs.music_id }}
+        run: |
+          cp -r .claude/skills/pro-edit/sound-effects/sfx public/sfx
+          mkdir -p public/audio
+          curl -fsSL -o public/audio/music.mp3 "https://assets.mixkit.co/music/$MUSIC_ID/$MUSIC_ID.mp3"
+          ls -l public/audio/music.mp3
+
+      - name: Render
+        run: |
+          mkdir -p out/check
+          if [ "$MODE" = "draft" ]; then
+            npx remotion render "$COMPOSITION" out/raw.mp4 --scale=0.5 --crf=28
+          else
+            npx remotion render "$COMPOSITION" out/raw.mp4 --codec=h264 --crf=16 --pixel-format=yuv420p --audio-codec=aac --audio-bitrate=256k
+          fi
+
+      - name: Master audio to -16 LUFS (one gain for the whole video, video stays untouched)
+        run: |
+          IN=$(ffmpeg -nostdin -hide_banner -nostats -i out/raw.mp4 -af loudnorm=print_format=json -f null - 2>&1 | grep input_i | sed 's/[^0-9.-]//g')
+          GAIN=$(python3 -c "print(round(-16-($IN),2))")
+          echo "input $IN LUFS, gain $GAIN dB"
+          ffmpeg -nostdin -hide_banner -nostats -y -i out/raw.mp4 -map 0:v -map 0:a -c:v copy -af "volume=${GAIN}dB,alimiter=limit=0.6:level=0" -ar 48000 -c:a aac -b:a 256k -movflags +faststart out/final.mp4
+
+      - name: Measure and check the result
+        run: |
+          ffprobe -v error -show_entries stream=codec_type,codec_name,width,height,r_frame_rate,duration:format=duration,size -of default=nw=1 out/final.mp4 | tee out/check/info.txt
+          ( ffmpeg -hide_banner -nostats -i out/final.mp4 -af ebur128=peak=true -f null - 2>&1 | tail -16 ) | tee out/check/loudness-stereo.txt
+          ( ffmpeg -hide_banner -nostats -i out/final.mp4 -ac 1 -af ebur128=peak=true -f null - 2>&1 | tail -16 ) | tee out/check/loudness-mono.txt
+          ffmpeg -hide_banner -nostats -i out/final.mp4 -af volumedetect -f null - 2>&1 | grep -E "mean_volume|max_volume" | tee out/check/volume.txt
+          win() { echo "$1 ($2 +$3 s): $(ffmpeg -nostdin -hide_banner -nostats -ss "$2" -t "$3" -i out/final.mp4 -af volumedetect -f null - 2>&1 | grep -E "mean_volume|max_volume" | sed "s/.*\] //" | tr "\n" " ")" | tee -a out/check/windows.txt; }
+          win before-impact 5.50 0.40; win impact 6.16 0.50; win speech 20.00 3.00; win ending-music-only 44.90 0.40; win last-second 46.00 0.25
+          node -e 'const t=require("./src/compositions/proedit/demo1.timeline.json");t.moments.forEach((m,i)=>console.log(String(i+1).padStart(2,"0")+" "+(m.at+Math.min(1.2,(m.end-m.at)*0.7)).toFixed(2)));t.lines.filter((l,i)=>i%9===0).forEach((l,i)=>console.log("L"+i+" "+(l.start+0.15).toFixed(2)))' > out/check/times.txt
+          while read n t; do
+            ffmpeg -nostdin -loglevel error -y -ss "$t" -i out/final.mp4 -frames:v 1 -vf "scale=540:-2" -q:v 3 "out/check/f_$n.jpg"
+          done < out/check/times.txt
+
+      - name: Upload draft video
+        if: env.MODE == 'draft'
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-draft-${{ github.event.inputs.name }}
+          path: out/final.mp4
+          retention-days: 3
+
+      - name: Upload final video to Drive
+        if: env.MODE == 'final'
+        run: |
+          STAMP=$(TZ=Asia/Kolkata date +%Y-%m-%d_%H%M)
+          NAME="${STAMP}_${LABEL:-video}_final.mp4"
+          cp out/final.mp4 "out/$NAME"
+          rclone copy "out/$NAME" GD: --drive-root-folder-id "$OUT_FOLDER" -v
+          echo "$NAME" | tee out/check/drive-name.txt
+          ls -l "out/$NAME"
+
+      - name: Upload check files
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-${{ env.MODE }}-${{ github.event.inputs.name }}
+          path: out/check
+          retention-days: 3

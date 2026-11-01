@@ -1,0 +1,89 @@
+name: Render Remotion video
+
+on:
+  workflow_dispatch:
+    inputs:
+      composition:
+        description: "Composition ID to render (must match id= in src/Root.tsx)"
+        required: true
+        default: "MyComp"
+      name:
+        description: "Optional label added to the file name (e.g. v2-final). Leave empty for none."
+        required: false
+        default: ""
+
+# Needed so the workflow can save the video into the rendered-videos/ folder
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download Remotion browser
+        run: npx remotion browser ensure
+
+      - name: Render video
+        env:
+          COMPOSITION: ${{ github.event.inputs.composition }}
+        run: |
+          mkdir -p out
+          npx remotion render "$COMPOSITION" out/video.mp4
+
+      - name: Build file name
+        id: fname
+        env:
+          COMPOSITION: ${{ github.event.inputs.composition }}
+          LABEL: ${{ github.event.inputs.name }}
+        run: |
+          STAMP=$(TZ=Asia/Kolkata date +%Y-%m-%d_%H%M)
+          # Keep only safe characters in the optional label
+          CLEAN_LABEL=$(echo "$LABEL" | tr ' ' '-' | tr -cd 'A-Za-z0-9._-')
+          if [ -n "$CLEAN_LABEL" ]; then
+            FILE="${STAMP}_${COMPOSITION}_${CLEAN_LABEL}.mp4"
+          else
+            FILE="${STAMP}_${COMPOSITION}.mp4"
+          fi
+          echo "file=$FILE" >> "$GITHUB_OUTPUT"
+          echo "path=rendered-videos/$COMPOSITION/$FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Upload video (downloadable from the run page)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.fname.outputs.file }}
+          path: out/video.mp4
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Save video into rendered-videos/ folder
+        env:
+          DEST: ${{ steps.fname.outputs.path }}
+        run: |
+          SIZE=$(stat -c %s out/video.mp4)
+          if [ "$SIZE" -gt 95000000 ]; then
+            echo "::warning::Video is larger than 95 MB. GitHub rejects files over 100 MB, so it was NOT saved to the repo. Download it from the Artifacts section instead."
+            exit 0
+          fi
+          mkdir -p "$(dirname "$DEST")"
+          cp out/video.mp4 "$DEST"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST"
+          git commit -m "Add rendered video: $DEST"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          echo "Saved to $DEST"

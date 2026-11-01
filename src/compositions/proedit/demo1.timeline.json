@@ -1,0 +1,742 @@
+{
+ "videoFile": "video/input.mp4",
+ "musicFile": "audio/music.mp3",
+ "musicVolume": 0.3,
+ "total": 46.27,
+ "segments": [
+  {
+   "src": 0,
+   "out": 0,
+   "len": 14.42
+  },
+  {
+   "src": 14.56,
+   "out": 14.42,
+   "len": 9
+  },
+  {
+   "src": 23.71,
+   "out": 23.42,
+   "len": 8.33
+  },
+  {
+   "src": 32.32,
+   "out": 31.75,
+   "len": 13.02
+  }
+ ],
+ "moments": [
+  {
+   "at": 0.74,
+   "end": 1.4,
+   "sixty": 0,
+   "grow": 0
+  },
+  {
+   "at": 1.4,
+   "end": 2.76,
+   "sixty": 0.58,
+   "grow": 0
+  },
+  {
+   "at": 6.16,
+   "end": 7.55,
+   "sixty": 0,
+   "grow": 0
+  },
+  {
+   "at": 7.6,
+   "end": 9.3,
+   "sixty": 0,
+   "grow": 0
+  },
+  {
+   "at": 9.38,
+   "end": 10.6,
+   "sixty": 0,
+   "grow": 0
+  },
+  {
+   "at": 15.2,
+   "end": 16.66,
+   "sixty": 0,
+   "grow": 0
+  },
+  {
+   "at": 18.2,
+   "end": 20.46,
+   "sixty": 0,
+   "grow": 0.66
+  },
+  {
+   "at": 24.27,
+   "end": 25.41,
+   "sixty": 0,
+   "grow": 0
+  },
+  {
+   "at": 28.71,
+   "end": 30.51,
+   "sixty": 0,
+   "grow": 0.92
+  },
+  {
+   "at": 31.83,
+   "end": 33.63,
+   "sixty": 0,
+   "grow": 0.38
+  },
+  {
+   "at": 35.69,
+   "end": 36.73,
+   "sixty": 0,
+   "grow": 0
+  },
+  {
+   "at": 36.79,
+   "end": 38.83,
+   "sixty": 0,
+   "grow": 0
+  },
+  {
+   "at": 40.77,
+   "end": 43.33,
+   "sixty": 0,
+   "grow": 0
+  },
+  {
+   "at": 43.87,
+   "end": 46.27,
+   "sixty": 0,
+   "grow": 0
+  }
+ ],
+ "lines": [
+  {
+   "text": "So hi guys",
+   "start": 0,
+   "end": 0.74,
+   "hi": -1
+  },
+  {
+   "text": "my name",
+   "start": 0.74,
+   "end": 0.98,
+   "hi": -1
+  },
+  {
+   "text": "is Manish",
+   "start": 0.98,
+   "end": 1.36,
+   "hi": -1
+  },
+  {
+   "text": "and it's been",
+   "start": 1.36,
+   "end": 1.98,
+   "hi": -1
+  },
+  {
+   "text": "60 day",
+   "start": 1.98,
+   "end": 2.76,
+   "hi": 0
+  },
+  {
+   "text": "I'm making",
+   "start": 2.76,
+   "end": 3.1,
+   "hi": -1
+  },
+  {
+   "text": "this all content",
+   "start": 3.1,
+   "end": 4.04,
+   "hi": -1
+  },
+  {
+   "text": "and",
+   "start": 4.04,
+   "end": 4.66,
+   "hi": -1
+  },
+  {
+   "text": "it's my sixth",
+   "start": 4.66,
+   "end": 5.2,
+   "hi": -1
+  },
+  {
+   "text": "day of making",
+   "start": 5.2,
+   "end": 6.16,
+   "hi": -1
+  },
+  {
+   "text": "10 lakh rupees",
+   "start": 6.16,
+   "end": 6.88,
+   "hi": 0
+  },
+  {
+   "text": "with my coaching",
+   "start": 6.88,
+   "end": 8.14,
+   "hi": 2
+  },
+  {
+   "text": "business",
+   "start": 8.14,
+   "end": 8.5,
+   "hi": -1
+  },
+  {
+   "text": "and then loving",
+   "start": 8.5,
+   "end": 9.6,
+   "hi": 2
+  },
+  {
+   "text": "the process",
+   "start": 9.6,
+   "end": 10.16,
+   "hi": 1
+  },
+  {
+   "text": "of making",
+   "start": 10.16,
+   "end": 10.6,
+   "hi": -1
+  },
+  {
+   "text": "the videos",
+   "start": 10.6,
+   "end": 11.68,
+   "hi": -1
+  },
+  {
+   "text": "all the content",
+   "start": 11.68,
+   "end": 12.48,
+   "hi": -1
+  },
+  {
+   "text": "from last 60",
+   "start": 12.48,
+   "end": 13.6,
+   "hi": 2
+  },
+  {
+   "text": "days",
+   "start": 13.6,
+   "end": 14.42,
+   "hi": -1
+  },
+  {
+   "text": "And yeah",
+   "start": 14.42,
+   "end": 15.2,
+   "hi": -1
+  },
+  {
+   "text": "I love",
+   "start": 15.2,
+   "end": 15.66,
+   "hi": 1
+  },
+  {
+   "text": "the response",
+   "start": 15.66,
+   "end": 16.36,
+   "hi": -1
+  },
+  {
+   "text": "and overwhelmed",
+   "start": 16.36,
+   "end": 17.66,
+   "hi": -1
+  },
+  {
+   "text": "all the new",
+   "start": 17.66,
+   "end": 18.86,
+   "hi": -1
+  },
+  {
+   "text": "followers and they",
+   "start": 18.86,
+   "end": 20.52,
+   "hi": 0
+  },
+  {
+   "text": "being so much",
+   "start": 20.52,
+   "end": 21.44,
+   "hi": -1
+  },
+  {
+   "text": "love to me",
+   "start": 21.44,
+   "end": 22.26,
+   "hi": 0
+  },
+  {
+   "text": "and my content",
+   "start": 22.26,
+   "end": 23.42,
+   "hi": -1
+  },
+  {
+   "text": "I loving",
+   "start": 23.42,
+   "end": 23.71,
+   "hi": 1
+  },
+  {
+   "text": "the process each",
+   "start": 23.71,
+   "end": 24.79,
+   "hi": 1
+  },
+  {
+   "text": "and every day",
+   "start": 24.79,
+   "end": 25.45,
+   "hi": -1
+  },
+  {
+   "text": "I seek new",
+   "start": 25.45,
+   "end": 27.59,
+   "hi": -1
+  },
+  {
+   "text": "things and learn",
+   "start": 27.59,
+   "end": 29.19,
+   "hi": -1
+  },
+  {
+   "text": "how to grow",
+   "start": 29.19,
+   "end": 29.79,
+   "hi": 2
+  },
+  {
+   "text": "myself",
+   "start": 29.79,
+   "end": 30.07,
+   "hi": -1
+  },
+  {
+   "text": "and",
+   "start": 30.07,
+   "end": 30.59,
+   "hi": -1
+  },
+  {
+   "text": "how we can",
+   "start": 30.59,
+   "end": 32.21,
+   "hi": -1
+  },
+  {
+   "text": "grow",
+   "start": 32.21,
+   "end": 32.45,
+   "hi": 0
+  },
+  {
+   "text": "this",
+   "start": 32.45,
+   "end": 32.69,
+   "hi": -1
+  },
+  {
+   "text": "like the followers",
+   "start": 32.69,
+   "end": 34.01,
+   "hi": 2
+  },
+  {
+   "text": "and all these",
+   "start": 34.01,
+   "end": 34.71,
+   "hi": -1
+  },
+  {
+   "text": "things",
+   "start": 34.71,
+   "end": 35.01,
+   "hi": -1
+  },
+  {
+   "text": "and I love",
+   "start": 35.01,
+   "end": 36.03,
+   "hi": 2
+  },
+  {
+   "text": "the process",
+   "start": 36.03,
+   "end": 36.79,
+   "hi": 1
+  },
+  {
+   "text": "Thank you",
+   "start": 36.79,
+   "end": 37.07,
+   "hi": 0
+  },
+  {
+   "text": "so much",
+   "start": 37.07,
+   "end": 37.63,
+   "hi": -1
+  },
+  {
+   "text": "for supporting me",
+   "start": 37.63,
+   "end": 39.69,
+   "hi": -1
+  },
+  {
+   "text": "I hope",
+   "start": 39.71,
+   "end": 40.13,
+   "hi": -1
+  },
+  {
+   "text": "I continue",
+   "start": 40.13,
+   "end": 41.21,
+   "hi": -1
+  },
+  {
+   "text": "this journey",
+   "start": 41.21,
+   "end": 42.41,
+   "hi": 1
+  },
+  {
+   "text": "with you all",
+   "start": 42.41,
+   "end": 43.87,
+   "hi": -1
+  },
+  {
+   "text": "Thank you",
+   "start": 43.87,
+   "end": 44.25,
+   "hi": 0
+  },
+  {
+   "text": "so much",
+   "start": 44.25,
+   "end": 46.27,
+   "hi": -1
+  }
+ ],
+ "cues": [
+  {
+   "t": 0.22,
+   "file": "tick/fs384187.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 0.74,
+   "file": "click/kenney-interface-click-001.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 1.08,
+   "file": "pop/fs-258269-mouth-pop.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 1.4,
+   "file": "typing/fs-511418-data-reveal-sound.ogg",
+   "gain": 0.3
+  },
+  {
+   "t": 1.98,
+   "file": "click/fs788933.ogg",
+   "gain": 0.45
+  },
+  {
+   "t": 2.76,
+   "file": "ui-blip/kenney-digital-pepsound1.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 3.42,
+   "file": "pop/kenney-interface-maximize-002.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 3.7,
+   "file": "riser/fs-685256-riser-sound-effect-short-wav.ogg",
+   "gain": 0.4
+  },
+  {
+   "t": 4.66,
+   "file": "ding/fs-349504-triangle-open-04.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 5.2,
+   "file": "tick/fs528561.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 6.09,
+   "file": "kit/whoosh.ogg",
+   "gain": 0.45
+  },
+  {
+   "t": 6.16,
+   "file": "impact/fs-177242-cinematic-impact.ogg",
+   "gain": 1
+  },
+  {
+   "t": 7.53,
+   "file": "transition/fs-786514-swoosh-v2.ogg",
+   "gain": 0.4
+  },
+  {
+   "t": 7.6,
+   "file": "pop/fs-447910-plop.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 8.5,
+   "file": "click/kenney-interface-select-001.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 9.38,
+   "file": "ui-blip/kenney-digital-pepsound2.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 9.82,
+   "file": "pop/fs-467951-ui-button-click.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 10.4,
+   "file": "pop/kenney-interface-pluck-001.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 11.28,
+   "file": "ding/fs-571513-soft-notifications-bell-ding-d.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 12.16,
+   "file": "tick/fs721514.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 13.2,
+   "file": "pop/fs-514833-user-interface-menu-sounds-wav.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 14.42,
+   "file": "click/kenney-interface-select-002.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 15.5,
+   "file": "pop/fs-824189-pop-in-sfx.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 15.94,
+   "file": "ui-blip/kenney-digital-pepsound3.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 16.68,
+   "file": "pop/kenney-interface-pluck-002.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 17.66,
+   "file": "ding/fs-634690-lil-pip.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 18.13,
+   "file": "whoosh/fs-683101-quick-woosh.ogg",
+   "gain": 0.25
+  },
+  {
+   "t": 18.86,
+   "file": "ding/kenney-interface-confirmation-001.ogg",
+   "gain": 0.3
+  },
+  {
+   "t": 19.06,
+   "file": "ding/kenney-interface-confirmation-002.ogg",
+   "gain": 0.3
+  },
+  {
+   "t": 19.26,
+   "file": "ding/kenney-interface-confirmation-003.ogg",
+   "gain": 0.3
+  },
+  {
+   "t": 20.52,
+   "file": "click/kenney-interface-select-003.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 21.44,
+   "file": "pop/fs202230.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 22.26,
+   "file": "ui-blip/kenney-digital-threetone1.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 23.42,
+   "file": "kit/pop.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 23.87,
+   "file": "ding/kenney-interface-bong-001.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 24.93,
+   "file": "pop/fs323738.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 25.45,
+   "file": "click/kenney-interface-tick-001.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 25.95,
+   "file": "ui-blip/kenney-digital-threetone2.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 27.23,
+   "file": "ding/kenney-interface-glass-001.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 27.89,
+   "file": "click/kenney-interface-toggle-001.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 29.19,
+   "file": "ui-blip/kenney-digital-twotone1.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 29.56,
+   "file": "whoosh/fs810485.ogg",
+   "gain": 0.3
+  },
+  {
+   "t": 29.63,
+   "file": "pop/fs527522.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 30.59,
+   "file": "ding/kenney-interface-glass-002.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 31.89,
+   "file": "click/kenney-interface-toggle-002.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 32.14,
+   "file": "whoosh/fs830856.ogg",
+   "gain": 0.25
+  },
+  {
+   "t": 32.21,
+   "file": "pop/kenney-interface-drop-001.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 33.03,
+   "file": "ui-blip/kenney-digital-twotone2.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 35.85,
+   "file": "pop/kenney-interface-drop-002.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 36.72,
+   "file": "whoosh/fs393811.ogg",
+   "gain": 0.25
+  },
+  {
+   "t": 36.79,
+   "file": "pop/kenney-interface-drop-003.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 37.63,
+   "file": "kit/click.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 38.77,
+   "file": "ui-blip/kenney-ui-rollover1.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 39.71,
+   "file": "kit/tick.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 40.77,
+   "file": "ui-blip/kenney-ui-rollover2.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 41.23,
+   "file": "riser/kenney-digital-powerup1.ogg",
+   "gain": 0.3
+  },
+  {
+   "t": 41.63,
+   "file": "pop/kenney-interface-maximize-001.ogg",
+   "gain": 0.34
+  },
+  {
+   "t": 42.41,
+   "file": "ui-blip/kenney-ui-rollover3.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 43.17,
+   "file": "ui-blip/kenney-ui-rollover4.ogg",
+   "gain": 0.13
+  },
+  {
+   "t": 43.87,
+   "file": "impact/kenney-impact-impactsoft-heavy-000.ogg",
+   "gain": 0.45
+  }
+ ]
+}

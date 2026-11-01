@@ -1,0 +1,90 @@
+﻿name: Prep video (transcript + preview frames)
+
+on:
+  workflow_dispatch:
+    inputs:
+      drive_file_id:
+        description: "Google Drive file ID of the raw video"
+        required: true
+      label:
+        description: "Short name, no spaces (e.g. demo1)"
+        required: true
+        default: "demo1"
+
+permissions:
+  contents: read
+
+jobs:
+  prep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Install ffmpeg and rclone
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg rclone
+
+      - name: Download raw video from Google Drive
+        env:
+          FILE_ID: ${{ github.event.inputs.drive_file_id }}
+          RCLONE_CONFIG_GD_TYPE: drive
+          RCLONE_CONFIG_GD_SCOPE: drive
+          RCLONE_CONFIG_GD_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          RCLONE_CONFIG_GD_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          RT: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+        run: |
+          RT=$(printf '%s' "$RT" | tr -d '[:space:]"{}')
+          export RCLONE_CONFIG_GD_CLIENT_ID=$(printf '%s' "$RCLONE_CONFIG_GD_CLIENT_ID" | tr -d '[:space:]"')
+          export RCLONE_CONFIG_GD_CLIENT_SECRET=$(printf '%s' "$RCLONE_CONFIG_GD_CLIENT_SECRET" | tr -d '[:space:]"')
+          export RCLONE_CONFIG_GD_TOKEN="{\"access_token\":\"\",\"token_type\":\"Bearer\",\"refresh_token\":\"$RT\",\"expiry\":\"2000-01-01T00:00:00Z\"}"
+          mkdir -p work
+          rclone backend copyid GD: "$FILE_ID" work/raw.mp4 --drive-acknowledge-abuse
+          ls -l work/
+      - name: Video info
+        run: |
+          ffprobe -v error -show_entries stream=codec_type,codec_name,width,height,r_frame_rate,duration \
+            -of default=nw=1 work/raw.mp4 | tee work/info.txt
+
+      - name: Preview frames (contact sheet)
+        run: |
+          DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 work/raw.mp4)
+          ffmpeg -loglevel error -y -i work/raw.mp4 \
+            -vf "fps=1/$(python3 -c "print(max(1,round(float('$DUR')/20,2)))"),scale=360:-1,tile=5x4:padding=4" \
+            -frames:v 1 work/contact.jpg
+          ffmpeg -loglevel error -y -i work/raw.mp4 -vf "scale=480:-2" -c:v libx264 -crf 30 -an work/preview.mp4
+
+      - name: Transcript with word timestamps
+        run: |
+          ffmpeg -loglevel error -y -i work/raw.mp4 -vn -ac 1 -ar 16000 work/audio.wav
+          pip install --quiet faster-whisper
+          python3 - <<'PY'
+          import json
+          from faster_whisper import WhisperModel
+          m = WhisperModel("small", device="cpu", compute_type="int8")
+          import wave, numpy as np
+          with wave.open("work/audio.wav") as wf:
+              audio = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
+          segs, info = m.transcribe(audio, word_timestamps=True, vad_filter=True)
+          out = {"language": info.language, "words": [], "segments": []}
+          for s in segs:
+              out["segments"].append({"start": s.start, "end": s.end, "text": s.text.strip()})
+              for w in (s.words or []):
+                  out["words"].append({"text": w.word.strip(), "start": w.start, "end": w.end})
+          json.dump(out, open("work/transcript.json", "w"), ensure_ascii=False, indent=1)
+          print(info.language, len(out["words"]), "words")
+          PY
+
+      - name: Upload prep files
+        uses: actions/upload-artifact@v4
+        with:
+          name: prep-${{ github.event.inputs.label }}
+          path: |
+            work/info.txt
+            work/contact.jpg
+            work/preview.mp4
+            work/transcript.json
+          retention-days: 14
+
+
+
+

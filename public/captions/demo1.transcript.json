@@ -1,0 +1,682 @@
+{
+ "language": "en",
+ "words": [
+  {
+   "text": "So",
+   "start": 0.0,
+   "end": 0.22
+  },
+  {
+   "text": "hi",
+   "start": 0.22,
+   "end": 0.42
+  },
+  {
+   "text": "guys,",
+   "start": 0.42,
+   "end": 0.66
+  },
+  {
+   "text": "my",
+   "start": 0.74,
+   "end": 0.86
+  },
+  {
+   "text": "name",
+   "start": 0.86,
+   "end": 0.98
+  },
+  {
+   "text": "is",
+   "start": 0.98,
+   "end": 1.08
+  },
+  {
+   "text": "Manish",
+   "start": 1.08,
+   "end": 1.36
+  },
+  {
+   "text": "and",
+   "start": 1.36,
+   "end": 1.58
+  },
+  {
+   "text": "it's",
+   "start": 1.58,
+   "end": 1.76
+  },
+  {
+   "text": "been",
+   "start": 1.76,
+   "end": 1.98
+  },
+  {
+   "text": "60",
+   "start": 1.98,
+   "end": 2.52
+  },
+  {
+   "text": "day",
+   "start": 2.52,
+   "end": 2.76
+  },
+  {
+   "text": "I'm",
+   "start": 2.76,
+   "end": 2.92
+  },
+  {
+   "text": "making",
+   "start": 2.92,
+   "end": 3.1
+  },
+  {
+   "text": "this",
+   "start": 3.1,
+   "end": 3.42
+  },
+  {
+   "text": "all",
+   "start": 3.42,
+   "end": 3.66
+  },
+  {
+   "text": "content",
+   "start": 3.66,
+   "end": 4.04
+  },
+  {
+   "text": "and",
+   "start": 4.04,
+   "end": 4.66
+  },
+  {
+   "text": "it's",
+   "start": 4.66,
+   "end": 4.82
+  },
+  {
+   "text": "my",
+   "start": 4.82,
+   "end": 4.96
+  },
+  {
+   "text": "sixth",
+   "start": 4.96,
+   "end": 5.2
+  },
+  {
+   "text": "day",
+   "start": 5.2,
+   "end": 5.48
+  },
+  {
+   "text": "of",
+   "start": 5.48,
+   "end": 5.88
+  },
+  {
+   "text": "making",
+   "start": 5.88,
+   "end": 6.16
+  },
+  {
+   "text": "10",
+   "start": 6.16,
+   "end": 6.46
+  },
+  {
+   "text": "lakh",
+   "start": 6.46,
+   "end": 6.62
+  },
+  {
+   "text": "rupees",
+   "start": 6.62,
+   "end": 6.88
+  },
+  {
+   "text": "with",
+   "start": 6.88,
+   "end": 7.32
+  },
+  {
+   "text": "my",
+   "start": 7.32,
+   "end": 7.6
+  },
+  {
+   "text": "coaching",
+   "start": 7.6,
+   "end": 8.14
+  },
+  {
+   "text": "business",
+   "start": 8.14,
+   "end": 8.5
+  },
+  {
+   "text": "and",
+   "start": 8.5,
+   "end": 9.26
+  },
+  {
+   "text": "then",
+   "start": 9.26,
+   "end": 9.38
+  },
+  {
+   "text": "loving",
+   "start": 9.38,
+   "end": 9.6
+  },
+  {
+   "text": "the",
+   "start": 9.6,
+   "end": 9.82
+  },
+  {
+   "text": "process",
+   "start": 9.82,
+   "end": 10.16
+  },
+  {
+   "text": "of",
+   "start": 10.16,
+   "end": 10.4
+  },
+  {
+   "text": "making",
+   "start": 10.4,
+   "end": 10.6
+  },
+  {
+   "text": "the",
+   "start": 10.6,
+   "end": 11.28
+  },
+  {
+   "text": "videos",
+   "start": 11.28,
+   "end": 11.68
+  },
+  {
+   "text": "all",
+   "start": 11.68,
+   "end": 12.04
+  },
+  {
+   "text": "the",
+   "start": 12.04,
+   "end": 12.16
+  },
+  {
+   "text": "content",
+   "start": 12.16,
+   "end": 12.48
+  },
+  {
+   "text": "from",
+   "start": 12.48,
+   "end": 12.82
+  },
+  {
+   "text": "last",
+   "start": 12.82,
+   "end": 13.2
+  },
+  {
+   "text": "60",
+   "start": 13.2,
+   "end": 13.6
+  },
+  {
+   "text": "days.",
+   "start": 13.6,
+   "end": 14.06
+  },
+  {
+   "text": "And",
+   "start": 14.44,
+   "end": 14.92
+  },
+  {
+   "text": "yeah,",
+   "start": 14.92,
+   "end": 15.2
+  },
+  {
+   "text": "I",
+   "start": 15.34,
+   "end": 15.64
+  },
+  {
+   "text": "love",
+   "start": 15.64,
+   "end": 15.8
+  },
+  {
+   "text": "the",
+   "start": 15.8,
+   "end": 16.08
+  },
+  {
+   "text": "response",
+   "start": 16.08,
+   "end": 16.5
+  },
+  {
+   "text": "and",
+   "start": 16.5,
+   "end": 16.82
+  },
+  {
+   "text": "old",
+   "start": 16.82,
+   "end": 17.18
+  },
+  {
+   "text": "whammed",
+   "start": 17.18,
+   "end": 17.8
+  },
+  {
+   "text": "all",
+   "start": 17.8,
+   "end": 18.14
+  },
+  {
+   "text": "the",
+   "start": 18.14,
+   "end": 18.34
+  },
+  {
+   "text": "new",
+   "start": 18.34,
+   "end": 19.0
+  },
+  {
+   "text": "followers",
+   "start": 19.0,
+   "end": 19.58
+  },
+  {
+   "text": "and",
+   "start": 19.58,
+   "end": 20.2
+  },
+  {
+   "text": "they",
+   "start": 20.2,
+   "end": 20.66
+  },
+  {
+   "text": "being",
+   "start": 20.66,
+   "end": 20.94
+  },
+  {
+   "text": "so",
+   "start": 20.94,
+   "end": 21.32
+  },
+  {
+   "text": "much",
+   "start": 21.32,
+   "end": 21.58
+  },
+  {
+   "text": "loves",
+   "start": 21.58,
+   "end": 21.96
+  },
+  {
+   "text": "to",
+   "start": 21.96,
+   "end": 22.24
+  },
+  {
+   "text": "me",
+   "start": 22.24,
+   "end": 22.4
+  },
+  {
+   "text": "and",
+   "start": 22.4,
+   "end": 22.62
+  },
+  {
+   "text": "my",
+   "start": 22.62,
+   "end": 22.76
+  },
+  {
+   "text": "content,",
+   "start": 22.76,
+   "end": 23.22
+  },
+  {
+   "text": "I",
+   "start": 23.56,
+   "end": 23.84
+  },
+  {
+   "text": "loving",
+   "start": 23.84,
+   "end": 24.0
+  },
+  {
+   "text": "the",
+   "start": 24.0,
+   "end": 24.16
+  },
+  {
+   "text": "process",
+   "start": 24.16,
+   "end": 24.56
+  },
+  {
+   "text": "each",
+   "start": 24.56,
+   "end": 25.08
+  },
+  {
+   "text": "and",
+   "start": 25.08,
+   "end": 25.22
+  },
+  {
+   "text": "every",
+   "start": 25.22,
+   "end": 25.46
+  },
+  {
+   "text": "day",
+   "start": 25.46,
+   "end": 25.74
+  },
+  {
+   "text": "I",
+   "start": 25.74,
+   "end": 26.24
+  },
+  {
+   "text": "seek",
+   "start": 26.24,
+   "end": 27.52
+  },
+  {
+   "text": "new",
+   "start": 27.52,
+   "end": 27.88
+  },
+  {
+   "text": "things",
+   "start": 27.88,
+   "end": 28.18
+  },
+  {
+   "text": "and",
+   "start": 28.18,
+   "end": 28.48
+  },
+  {
+   "text": "learn",
+   "start": 28.48,
+   "end": 29.48
+  },
+  {
+   "text": "how",
+   "start": 29.48,
+   "end": 29.78
+  },
+  {
+   "text": "to",
+   "start": 29.78,
+   "end": 29.92
+  },
+  {
+   "text": "grow",
+   "start": 29.92,
+   "end": 30.08
+  },
+  {
+   "text": "myself",
+   "start": 30.08,
+   "end": 30.36
+  },
+  {
+   "text": "and",
+   "start": 30.36,
+   "end": 30.88
+  },
+  {
+   "text": "how",
+   "start": 30.88,
+   "end": 31.38
+  },
+  {
+   "text": "we",
+   "start": 31.38,
+   "end": 32.46
+  },
+  {
+   "text": "can",
+   "start": 32.46,
+   "end": 32.78
+  },
+  {
+   "text": "grow",
+   "start": 32.78,
+   "end": 33.02
+  },
+  {
+   "text": "this",
+   "start": 33.02,
+   "end": 33.26
+  },
+  {
+   "text": "like",
+   "start": 33.26,
+   "end": 33.6
+  },
+  {
+   "text": "the",
+   "start": 33.6,
+   "end": 34.24
+  },
+  {
+   "text": "followers",
+   "start": 34.24,
+   "end": 34.58
+  },
+  {
+   "text": "and",
+   "start": 34.58,
+   "end": 34.94
+  },
+  {
+   "text": "all",
+   "start": 34.94,
+   "end": 35.12
+  },
+  {
+   "text": "these",
+   "start": 35.12,
+   "end": 35.28
+  },
+  {
+   "text": "things",
+   "start": 35.28,
+   "end": 35.58
+  },
+  {
+   "text": "and",
+   "start": 35.58,
+   "end": 36.26
+  },
+  {
+   "text": "I",
+   "start": 36.26,
+   "end": 36.42
+  },
+  {
+   "text": "love",
+   "start": 36.42,
+   "end": 36.6
+  },
+  {
+   "text": "the",
+   "start": 36.6,
+   "end": 36.82
+  },
+  {
+   "text": "process.",
+   "start": 36.82,
+   "end": 37.16
+  },
+  {
+   "text": "Thank",
+   "start": 37.36,
+   "end": 37.48
+  },
+  {
+   "text": "you",
+   "start": 37.48,
+   "end": 37.64
+  },
+  {
+   "text": "so",
+   "start": 37.64,
+   "end": 37.9
+  },
+  {
+   "text": "much",
+   "start": 37.9,
+   "end": 38.2
+  },
+  {
+   "text": "for",
+   "start": 38.2,
+   "end": 38.62
+  },
+  {
+   "text": "supporting",
+   "start": 38.62,
+   "end": 39.34
+  },
+  {
+   "text": "me.",
+   "start": 39.34,
+   "end": 39.76
+  },
+  {
+   "text": "I",
+   "start": 40.28,
+   "end": 40.38
+  },
+  {
+   "text": "hope",
+   "start": 40.38,
+   "end": 40.7
+  },
+  {
+   "text": "I",
+   "start": 40.7,
+   "end": 41.34
+  },
+  {
+   "text": "continue",
+   "start": 41.34,
+   "end": 41.78
+  },
+  {
+   "text": "this",
+   "start": 41.78,
+   "end": 42.2
+  },
+  {
+   "text": "journey",
+   "start": 42.2,
+   "end": 42.98
+  },
+  {
+   "text": "with",
+   "start": 42.98,
+   "end": 43.74
+  },
+  {
+   "text": "you",
+   "start": 43.74,
+   "end": 43.98
+  },
+  {
+   "text": "all.",
+   "start": 43.98,
+   "end": 44.28
+  },
+  {
+   "text": "Thank",
+   "start": 44.44,
+   "end": 44.74
+  },
+  {
+   "text": "you",
+   "start": 44.74,
+   "end": 44.82
+  },
+  {
+   "text": "so",
+   "start": 44.82,
+   "end": 44.92
+  },
+  {
+   "text": "much.",
+   "start": 44.92,
+   "end": 45.08
+  }
+ ],
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.82,
+   "text": "So hi guys, my name is Manish and it's been 60 day I'm making this all content and it's"
+  },
+  {
+   "start": 4.82,
+   "end": 10.16,
+   "text": "my sixth day of making 10 lakh rupees with my coaching business and then loving the process"
+  },
+  {
+   "start": 10.16,
+   "end": 14.06,
+   "text": "of making the videos all the content from last 60 days."
+  },
+  {
+   "start": 14.44,
+   "end": 21.58,
+   "text": "And yeah, I love the response and old whammed all the new followers and they being so much"
+  },
+  {
+   "start": 21.58,
+   "end": 28.18,
+   "text": "loves to me and my content, I loving the process each and every day I seek new things"
+  },
+  {
+   "start": 28.18,
+   "end": 35.58,
+   "text": "and learn how to grow myself and how we can grow this like the followers and all these things"
+  },
+  {
+   "start": 35.58,
+   "end": 42.98,
+   "text": "and I love the process. Thank you so much for supporting me. I hope I continue this journey"
+  },
+  {
+   "start": 42.98,
+   "end": 45.08,
+   "text": "with you all. Thank you so much."
+  }
+ ]
+}

@@ -1,0 +1,73 @@
+name: Grab clean frames for a storyboard
+
+on:
+  workflow_dispatch:
+    inputs:
+      drive_file_id:
+        description: "Google Drive file ID of the raw video"
+        required: true
+      times:
+        description: "Timestamps in seconds, comma separated (e.g. 0.9,2.1,6.5)"
+        required: true
+      label:
+        description: "Short name, no spaces"
+        required: true
+        default: "demo1"
+
+permissions:
+  contents: read
+
+jobs:
+  frames:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FILE_ID: ${{ github.event.inputs.drive_file_id }}
+      TIMES: ${{ github.event.inputs.times }}
+      RCLONE_CONFIG_GD_TYPE: drive
+      RCLONE_CONFIG_GD_SCOPE: drive
+      RCLONE_CONFIG_GD_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+      RCLONE_CONFIG_GD_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+      GD_RT: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+    steps:
+      - name: Install ffmpeg and rclone
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg rclone
+
+      - name: Download the original video from Drive
+        run: |
+          RT=$(printf '%s' "$GD_RT" | tr -d '[:space:]"{}')
+          export RCLONE_CONFIG_GD_CLIENT_ID=$(printf '%s' "$RCLONE_CONFIG_GD_CLIENT_ID" | tr -d '[:space:]"')
+          export RCLONE_CONFIG_GD_CLIENT_SECRET=$(printf '%s' "$RCLONE_CONFIG_GD_CLIENT_SECRET" | tr -d '[:space:]"')
+          export RCLONE_CONFIG_GD_TOKEN="{\"access_token\":\"\",\"token_type\":\"Bearer\",\"refresh_token\":\"$RT\",\"expiry\":\"2000-01-01T00:00:00Z\"}"
+          mkdir -p work/frames
+          rclone backend copyid GD: "$FILE_ID" work/raw.mp4 --drive-acknowledge-abuse
+
+      - name: Grab frames
+        run: |
+          for t in $(echo "$TIMES" | tr ',' ' '); do
+            ffmpeg -loglevel error -y -ss "$t" -i work/raw.mp4 -frames:v 1 -vf "scale=540:-2" -q:v 3 "work/frames/t_${t}.jpg"
+          done
+          ffmpeg -loglevel error -y -i work/raw.mp4 -vn -ac 1 -b:a 64k work/frames/voice.mp3
+          ffmpeg -hide_banner -nostats -i work/raw.mp4 -af silencedetect=noise=-32dB:d=0.2 -f null - 2>&1 | grep silence_ | tee work/frames/silences.txt
+          ls work/frames
+
+      - name: Audio levels (voice, music, key sounds)
+        run: |
+          lvl() { echo "$1: $(ffmpeg -nostdin -hide_banner -nostats ${3:-} -i "$2" -af volumedetect -f null - 2>&1 | grep -E "mean_volume|max_volume" | sed "s/.*volumedetect[^:]*: *//; s/.*\] //" | tr '\n' ' ')"; }
+          curl -fsSL -o work/m1168.mp3 "https://assets.mixkit.co/music/1168/1168.mp3"
+          {
+            lvl voice-whole work/raw.mp4
+            lvl music-whole work/m1168.mp3
+            lvl music-first-46s work/m1168.mp3 "-t 46"
+            lvl music-44to46 work/m1168.mp3 "-ss 44 -t 2"
+            lvl music-0to5 work/m1168.mp3 "-t 5"
+          } | tee work/frames/levels.txt
+
+      - name: Upload frames
+        uses: actions/upload-artifact@v4
+        with:
+          name: frames-${{ github.event.inputs.label }}
+          path: work/frames
+          retention-days: 14

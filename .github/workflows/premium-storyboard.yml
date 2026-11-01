@@ -33,6 +33,10 @@ jobs:
         with:
           node-version: 22
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install tools
         run: |
           sudo apt-get update -qq
@@ -66,7 +70,7 @@ jobs:
 
       - name: Pick the sharpest frame, track the face, match color
         run: |
-          pip install -q opencv-python-headless numpy
+          pip install -q "opencv-python-headless==4.10.0.84" "numpy<2"
           python3 - <<'PY'
           import cv2, json, os
           P = os.environ["P"]

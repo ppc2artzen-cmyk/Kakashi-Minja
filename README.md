@@ -21,4 +21,11 @@ AI video editing rendered in GitHub Actions: Remotion draws the edit, Whisper ma
 - `scripts/install-remotion-skills.sh`: installs the official Remotion skills on demand
 - `scripts/storyboard/`: builds the storyboard and timeline
 
+## Extra tools (installed inside the workflows)
+
+- yt-dlp 2026.10.26: downloads reference reels to Drive
+- auto-editor 29.3.1: removes silence
+- PySceneDetect 0.7.2: finds scene cuts
+- whisperX 3.8.6: more exact word timing
+
 Never commit API keys or client videos to this repo. It is public.

@@ -1,0 +1,66 @@
+name: Download reference reels
+
+# Files go only to the private Drive folder. No artifacts: this repo is public and the reels belong to their creators.
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "Reel links, separated by spaces (https only)"
+        required: true
+      drive_folder:
+        description: "Drive folder name to save into"
+        required: true
+        default: "References"
+
+permissions:
+  contents: read
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      URLS: ${{ github.event.inputs.urls }}
+      FOLDER: ${{ github.event.inputs.drive_folder }}
+      RCLONE_CONFIG_GD_TYPE: drive
+      RCLONE_CONFIG_GD_SCOPE: drive
+      GD_CID: ${{ secrets.GDRIVE_CLIENT_ID }}
+      GD_CSEC: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+      GD_RT: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg rclone
+          pip install -q "yt-dlp==2026.10.26"
+
+      - name: Download the reels
+        run: |
+          mkdir -p refs
+          ok=0; fail=0
+          for u in $URLS; do
+            case "$u" in
+              https://*) ;;
+              *) echo "Skipped a link that is not https"; fail=$((fail+1)); continue ;;
+            esac
+            if yt-dlp --no-playlist --no-progress --merge-output-format mp4 -o "refs/%(id)s.%(ext)s" -- "$u"; then
+              ok=$((ok+1))
+            else
+              fail=$((fail+1))
+            fi
+          done
+          echo "Downloaded: $ok, failed: $fail"
+          ls -l refs
+          [ "$ok" -gt 0 ]
+
+      - name: Save to Drive
+        run: |
+          export RCLONE_CONFIG_GD_CLIENT_ID=$(printf '%s' "$GD_CID" | tr -d '[:space:]"')
+          export RCLONE_CONFIG_GD_CLIENT_SECRET=$(printf '%s' "$GD_CSEC" | tr -d '[:space:]"')
+          RT=$(printf '%s' "$GD_RT" | tr -d '[:space:]"{}')
+          export RCLONE_CONFIG_GD_TOKEN="{\"access_token\":\"\",\"token_type\":\"Bearer\",\"refresh_token\":\"$RT\",\"expiry\":\"2000-01-01T00:00:00Z\"}"
+          rclone copy refs "GD:$FOLDER" -v

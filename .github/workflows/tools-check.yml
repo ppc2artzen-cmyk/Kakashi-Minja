@@ -1,0 +1,60 @@
+name: Check editing tools
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Make a test clip (2 scenes, with a silent gap)
+        run: |
+          mkdir -p work
+          ffmpeg -nostdin -loglevel error -y \
+            -f lavfi -i "color=c=red:s=640x360:r=30:d=3" -f lavfi -i "color=c=blue:s=640x360:r=30:d=3" \
+            -f lavfi -i "sine=f=440:d=2" -f lavfi -i "anullsrc=r=44100:cl=mono:d=2" -f lavfi -i "sine=f=660:d=2" \
+            -filter_complex "[0:v][1:v]concat=n=2:v=1[v];[2:a][3:a][4:a]concat=n=3:v=0:a=1[a]" \
+            -map "[v]" -map "[a]" -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest work/test.mp4
+          ffprobe -v error -show_entries format=duration -of csv=p=0 work/test.mp4
+
+      - name: yt-dlp
+        run: |
+          python -m venv work/ytdlp && work/ytdlp/bin/pip install -q "yt-dlp==2026.10.26"
+          work/ytdlp/bin/yt-dlp --version
+          work/ytdlp/bin/yt-dlp --no-playlist -o work/dl.%(ext)s "https://assets.mixkit.co/music/130/130.mp3"
+          ls -l work/dl.*
+
+      - name: auto-editor
+        run: |
+          python -m venv work/ae && work/ae/bin/pip install -q "auto-editor==29.3.1"
+          work/ae/bin/auto-editor --version
+          work/ae/bin/auto-editor work/test.mp4 --no-open -o work/ae-out.mp4
+          echo "before: $(ffprobe -v error -show_entries format=duration -of csv=p=0 work/test.mp4) s"
+          echo "after:  $(ffprobe -v error -show_entries format=duration -of csv=p=0 work/ae-out.mp4) s"
+
+      - name: PySceneDetect
+        run: |
+          python -m venv work/sd && work/sd/bin/pip install -q "scenedetect[opencv-headless]==0.7.2"
+          work/sd/bin/scenedetect version
+          work/sd/bin/scenedetect -i work/test.mp4 -o work/scenes detect-content list-scenes
+          cat work/scenes/*.csv | tail -n +2 | head -5
+
+      - name: whisperX
+        run: |
+          python -m venv work/wx && work/wx/bin/pip install -q "whisperx==3.8.6" --extra-index-url https://download.pytorch.org/whl/cpu
+          work/wx/bin/pip show whisperx | grep -E "^(Name|Version)"
+          work/wx/bin/python -c "import whisperx; print('whisperx imports OK')"
+          df -h / | tail -1

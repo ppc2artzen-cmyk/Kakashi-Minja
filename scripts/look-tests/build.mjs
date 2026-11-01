@@ -48,7 +48,7 @@ const looks = {
 .rail{left:60px;right:60px;top:1500px;text-align:center;font:400 74px/1.1 "Anton",sans-serif;color:#fff;-webkit-text-stroke:10px #000;paint-order:stroke fill;letter-spacing:.02em}
 .rail em{font-style:normal;color:#FFD60A}
 #bar{left:-30px;top:1170px;width:1140px;height:270px;background:#FFD60A;transform-origin:0 50%}
-#opp{left:0;right:0;top:1178px;text-align:center;font:400 232px/1.08 "Anton",sans-serif;color:#000;letter-spacing:.005em}
+#opp{left:0;right:0;top:1178px;text-align:center;font:400 214px/1.17 "Anton",sans-serif;color:#000;letter-spacing:.005em}
 #top2{left:0;right:0;top:1040px;text-align:center;font:400 112px/1 "Anton",sans-serif;color:#fff;-webkit-text-stroke:12px #000;paint-order:stroke fill}`,
     behind: clip("w1", 0.35, 2.55, "WORK", "b big") + clip("w2", 0.55, 2.35, "FROM", "b big") + clip("w3", 0.88, 2.02, "HOME", "b big"),
     front: clip("r1", 0.4, 2.5, 'OPPORTUNITY <em>SEARCH</em> KAR RAHE HAIN?', "f rail") +
@@ -70,8 +70,8 @@ tl.fromTo("#opp",{scale:1.5,opacity:0},{scale:1,opacity:1,duration:.2,ease:"powe
     fonts: [["Serif", "instrument-serif-latin-400-italic.woff2", 400, "italic"], ["Serif", "instrument-serif-latin-400-normal.woff2", 400], ["Sora", "sora-latin-700-normal.woff2", 700]],
     css: `
 #tint{position:absolute;inset:0;z-index:5;background:linear-gradient(180deg,rgba(40,24,8,.58) 0%,rgba(40,24,8,.12) 48%,rgba(20,12,4,.72) 100%)}
-.big{font:italic 400 292px/.92 "Serif",serif;color:#F7EBD3;letter-spacing:-.02em;white-space:nowrap}
-#w1{left:66px;top:120px}#w2{right:64px;top:370px}#w3{left:150px;top:620px;color:#E8B93C}
+.big{font:italic 400 200px/.92 "Serif",serif;color:#F7EBD3;letter-spacing:-.02em;white-space:nowrap}
+#w1{left:80px;top:96px}#w2{right:80px;top:96px}#w3{left:0;right:0;top:250px;text-align:center;font-size:400px;color:#E8B93C}
 .kick{left:0;right:0;text-align:center;font:700 34px/1 "Sora",sans-serif;letter-spacing:.34em;color:#E8B93C}
 #k1{top:1330px}
 #s1{left:70px;right:70px;top:1386px;text-align:center;font:400 88px/1.08 "Serif",serif;color:#F7EBD3}
@@ -79,7 +79,7 @@ tl.fromTo("#opp",{scale:1.5,opacity:0},{scale:1,opacity:1,duration:.2,ease:"powe
 #opp{left:0;right:0;top:1370px;text-align:center;font:italic 400 186px/1 "Serif",serif;color:#E8B93C;letter-spacing:-.02em}
 #rule{left:190px;top:1570px;width:700px;height:6px;background:#E8B93C;transform-origin:0 50%}`,
     behind: `<div id="tint"></div>` + clip("w1", 0.35, 2.55, "work", "b big") + clip("w2", 0.55, 2.35, "from", "b big") + clip("w3", 0.88, 2.02, "home", "b big"),
-    front: clip("k1", 0.4, 2.5, "THE SEARCH", "f kick") + clip("s1", 1.2, 1.7, "for a real opportunity", "f") +
+    front: clip("k1", 0.4, 2.5, "OPPORTUNITY", "f kick") + clip("s1", 1.2, 1.7, "search kar rahe hain", "f") +
       clip("k2", 3.9, 1.8, "BAHUT ACCHI", "f kick") + clip("opp", 4.85, 0.85, "opportunity", "f") + clip("rule", 4.85, 0.85, "", "f"),
     js: `
 ["#w1","#w2","#w3"].forEach((s,i)=>{tl.fromTo(s,{opacity:0,y:50,filter:"blur(22px)"},{opacity:1,y:0,filter:"blur(0px)",duration:.55,ease:"power3.out"},[.35,.55,.88][i]);});
@@ -99,12 +99,12 @@ tl.fromTo("#rule",{scaleX:0},{scaleX:1,duration:.55,ease:"power3.inOut"},5.0);`,
 .strip{position:absolute;z-index:8;left:-60px;width:1200px;clip-path:polygon(0 8%,12% 2%,28% 7%,46% 1%,63% 6%,81% 2%,100% 8%,100% 93%,84% 98%,66% 93%,47% 99%,29% 94%,13% 99%,0 92%)}
 #p1{top:150px;height:330px;background:#FFD60A;transform-origin:0 50%}
 #p2{top:500px;height:330px;background:#1E3DF5;transform-origin:100% 50%}
-.big{font:800 250px/1 "Bricolage",sans-serif;letter-spacing:-.04em;left:0;right:0;text-align:center}
-#w1{top:178px;color:#000}#w2{top:528px;color:#fff}
+.big{font:800 176px/1 "Bricolage",sans-serif;letter-spacing:-.04em;left:0;right:0;text-align:center;white-space:nowrap}
+#w1{top:226px;color:#000}#w2{top:520px;color:#fff;font-size:270px}
 .stick{font:800 76px/1 "Bricolage",sans-serif;color:#000;background:#fff;padding:18px 34px;border-radius:10px;white-space:nowrap;box-shadow:10px 10px 0 #1E3DF5}
 #s1{left:90px;top:1250px}#s2{left:170px;top:1380px;background:#FFD60A;box-shadow:10px 10px 0 #000}
 #s3{left:230px;top:1180px;background:#1E3DF5;color:#fff;box-shadow:10px 10px 0 #FFD60A}
-#opp{left:60px;top:1320px;font:800 150px/1 "Bricolage",sans-serif;letter-spacing:-.04em;color:#000;background:#FFD60A;padding:26px 36px;border-radius:14px;box-shadow:14px 14px 0 #000;white-space:nowrap}`,
+#opp{left:70px;top:1320px;font:800 122px/1 "Bricolage",sans-serif;letter-spacing:-.04em;color:#000;background:#FFD60A;padding:26px 36px;border-radius:14px;box-shadow:14px 14px 0 #000;white-space:nowrap}`,
     behind: clip("p1", 0.3, 2.6, "", "strip") + clip("p2", 0.55, 2.35, "", "strip") + clip("w1", 0.38, 2.52, "WORK FROM", "b big") + clip("w2", 0.88, 2.02, "HOME", "b big"),
     front: clip("s1", 1.2, 1.7, "opportunity", "f stick") + clip("s2", 1.75, 1.15, "search kar rahe hain?", "f stick") +
       clip("s3", 3.9, 1.8, "bahut acchi", "f stick") + clip("opp", 4.85, 0.85, "OPPORTUNITY", "f"),
@@ -132,7 +132,7 @@ tl.to("#cam",{scale:1,duration:.2,ease:"steps(4)"},2.9);`,
 #g1{top:1330px}#g2{top:1290px}
 #fill{height:12px;border-radius:6px;margin-top:24px;background:linear-gradient(90deg,#FFE97A,#FF7A00);transform-origin:0 50%}`,
     behind: `<div id="dim"></div>` + clip("w1", 0.35, 2.55, "WORK", "b big") + clip("w2", 0.55, 2.35, "FROM", "b big") + clip("w3", 0.88, 2.02, "HOME", "b big"),
-    front: clip("g1", 1.1, 1.8, '<div class="lab">LOOKING FOR</div><div class="val">An opportunity?</div>', "glass") +
+    front: clip("g1", 1.1, 1.8, '<div class="lab">SEARCH KAR RAHE HAIN</div><div class="val">Opportunity</div>', "glass") +
       clip("g2", 3.9, 1.8, '<div class="lab">BAHUT ACCHI</div><div class="val" id="v2">Opportunity</div><div id="fill"></div>', "glass"),
     js: `
 ["#w1","#w2","#w3"].forEach((s,i)=>{tl.fromTo(s,{y:120,opacity:0},{y:0,opacity:1,duration:.4,ease:"power4.out"},[.35,.55,.88][i]);});

@@ -124,7 +124,7 @@ jobs:
               lo, hi = int(a * tr["fps"]), int(b * tr["fps"])
               n = hi - lo
               cy = sum(tr["top"][j] + tr["h"][j] / 2 for j in range(lo, min(hi, len(tr["top"])))) / max(1, n)
-              html = html.replace(f"PIPTOP{i}px", f"{round(190 - cy * 640 / 1080)}px")
+              html = html.replace(f"PIPTOP{i}px", f"{round(190 - cy * 480 / 1080)}px")
           open(f"{P}/index.html", "w").write(html)
           PY
           npx -y hyperframes@0.8.226 check "$P" --json > out/check/check.json || true
@@ -148,6 +148,7 @@ jobs:
         run: |
           ffprobe -v error -show_entries stream=codec_type,codec_name,width,height,r_frame_rate:format=duration,size -of default=nw=1 out/final.mp4 | tee out/check/info.txt
           ffmpeg -nostdin -hide_banner -nostats -i out/final.mp4 -af ebur128=peak=true -f null - 2>&1 | tail -16 | tee out/check/loudness.txt
+          ffmpeg -nostdin -hide_banner -nostats -i out/final.mp4 -af "aresample=48000,asetnsamples=48000,astats=metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.RMS_level:file=out/check/rms.txt,ametadata=print:key=lavfi.astats.Overall.Peak_level:file=out/check/peak.txt" -f null - 2>/dev/null || true
           node -e 'const p=require(process.env.P.replace(/^/,"./")+"/plan.json");p.beats.forEach(([t,n])=>console.log(n,t))' > out/check/times.txt
           while read n t; do
             ffmpeg -nostdin -loglevel error -y -ss "$t" -i out/final.mp4 -frames:v 1 -vf "scale=540:-2" -q:v 3 "out/check/$n.jpg"

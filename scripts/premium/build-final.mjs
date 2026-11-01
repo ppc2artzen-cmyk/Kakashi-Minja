@@ -76,7 +76,7 @@ const sfx = [
   [16.71, "whoosh/fs393811.ogg", 0.5], [17.7, "impact/kenney-impact-impactsoft-heavy-000.ogg", 0.7],
 ];
 if (new Set(sfx.map((s) => s[1])).size !== sfx.length) throw new Error("repeated sound");
-const LEVEL = 0.32;
+const LEVEL = 0.5;
 const audio = sfx.map(([t, f, v], i) => { const len = f.startsWith("impact/") ? 0.9 : f.startsWith("typing/") ? 0.6 : 0.5; return `<audio id="sfx${i}" class="clip" data-start="${t}" data-duration="${len}" data-fade-out="0.15" data-track-index="${60 + i}" data-volume="${(v * LEVEL).toFixed(3)}" src="assets/sfx/${f}"></audio>`; }).join("\n");
 
 const css = `
@@ -126,7 +126,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
 .bub{align-self:flex-end;background:#e9e9ea;font:800 30px/1.2 "Sora",sans-serif;padding:18px 24px;border-radius:26px}.bub.me{align-self:flex-start;background:#7E1434;color:#fff}
 .lnk{display:flex;align-items:center;gap:16px;font:800 28px/1 "Sora",sans-serif;background:#F7EEDD;color:#7E1434;padding:22px;border-radius:20px}.lnk i{width:30px;height:30px;border-radius:50%;background:#7E1434;display:block}
 .pipWrap{position:absolute;z-index:47;left:350px;top:1490px;width:380px;height:380px;border-radius:50%;overflow:hidden;border:8px solid #F7EEDD;box-shadow:0 20px 50px rgba(0,0,0,.5)}
-.pipV{position:absolute;width:640px;height:1138px;left:-130px;max-width:none}
+.pipV{position:absolute;width:480px;height:853px;left:-50px;max-width:none}
 .whip{position:absolute;z-index:60;left:-80px;top:0;width:1240px;height:1920px;background:#7E1434}
 `;
 

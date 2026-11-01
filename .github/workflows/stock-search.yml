@@ -1,0 +1,85 @@
+name: Search stock media
+
+# Searches Pixabay and saves previews. The key stays in a secret and is never printed. Results are kept 1 day.
+on:
+  workflow_dispatch:
+    inputs:
+      query:
+        description: "What to search for"
+        required: true
+      kind:
+        type: choice
+        options: [both, images, videos]
+        default: both
+      orientation:
+        type: choice
+        options: [vertical, horizontal, all]
+        default: vertical
+
+permissions:
+  contents: read
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+      QUERY: ${{ github.event.inputs.query }}
+      KIND: ${{ github.event.inputs.kind }}
+      ORIENT: ${{ github.event.inputs.orientation }}
+    steps:
+      - name: Search Pixabay
+        run: |
+          mkdir -p out/previews
+          python3 - <<'PY'
+          import json, os, urllib.parse, urllib.request, urllib.error
+          key = os.environ["PIXABAY_API_KEY"].strip()
+          q = os.environ["QUERY"][:100]
+          kind = os.environ["KIND"]
+          orient = os.environ["ORIENT"]
+          def get(url, label):
+              params = {"key": key, "q": q, "per_page": 12, "safesearch": "true", "order": "popular"}
+              if label == "images":
+                  params["orientation"] = orient
+                  params["image_type"] = "photo"
+              req = urllib.request.Request(url + "?" + urllib.parse.urlencode(params), headers={"User-Agent": "kakashi-minja"})
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      return json.load(r), dict(r.headers)
+              except urllib.error.HTTPError as e:
+                  print(label, "HTTP error", e.code)
+                  raise SystemExit(1)
+          def save(url, path):
+              req = urllib.request.Request(url, headers={"User-Agent": "kakashi-minja"})
+              with urllib.request.urlopen(req, timeout=30) as r, open(path, "wb") as f:
+                  f.write(r.read())
+          out = {"query": q, "images": [], "videos": []}
+          if kind in ("both", "images"):
+              d, h = get("https://pixabay.com/api/", "images")
+              print("images found:", d.get("totalHits"), "rate limit left:", h.get("X-RateLimit-Remaining"))
+              for x in d.get("hits", []):
+                  out["images"].append({k: x.get(k) for k in ("id", "tags", "pageURL", "imageWidth", "imageHeight", "user", "webformatURL", "largeImageURL")})
+                  save(x["webformatURL"], f"out/previews/img_{x['id']}.jpg")
+          if kind in ("both", "videos"):
+              d, h = get("https://pixabay.com/api/videos/", "videos")
+              print("videos found:", d.get("totalHits"), "rate limit left:", h.get("X-RateLimit-Remaining"))
+              for x in d.get("hits", []):
+                  v = x.get("videos", {})
+                  m = v.get("medium", {})
+                  out["videos"].append({"id": x.get("id"), "tags": x.get("tags"), "pageURL": x.get("pageURL"), "duration": x.get("duration"), "user": x.get("user"),
+                                        "sizes": {s: {"w": v[s].get("width"), "h": v[s].get("height"), "url": v[s].get("url")} for s in v if v[s].get("url")}})
+                  t = m.get("thumbnail")
+                  if t: save(t, f"out/previews/vid_{x['id']}.jpg")
+          text = json.dumps(out, ensure_ascii=False, indent=1)
+          if key and key in text: raise SystemExit("key found in results, stopping")
+          open("out/results.json", "w").write(text)
+          print("saved", len(out["images"]), "images and", len(out["videos"]), "videos")
+          PY
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: stock-search
+          path: out
+          retention-days: 1

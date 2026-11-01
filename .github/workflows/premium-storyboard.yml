@@ -78,11 +78,13 @@ jobs:
           cap = cv2.VideoCapture("work/raw.mp4")
           fps = cap.get(cv2.CAP_PROP_FPS)
           face = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+          eyes = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
           out = []
+          faces = {}
           for i, b in enumerate(plan["beats"]):
               take = next(k for k in plan["takes"] if k["from"] <= b["t"] < k["to"])
               best = None
-              for off in [x * 0.05 for x in range(-7, 8)]:
+              for off in [x * 0.05 for x in range(-10, 11)]:
                   t = b["t"] + off
                   if not take["from"] + 0.03 <= t < take["to"] - 0.03: continue
                   cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
@@ -94,16 +96,24 @@ jobs:
                   x, y, w, h = max(fs, key=lambda r: r[2] * r[3])
                   c = g[max(0, y * 2):(y + h) * 2, max(0, x * 2):(x + w) * 2]
                   sharp = cv2.Laplacian(c, cv2.CV_64F).var() - abs(off) * 30
+                  # prefer open eyes: two eyes found in the top half of the face
+                  n_eyes = len(eyes.detectMultiScale(c[: c.shape[0] // 2 + 10], 1.1, 6, minSize=(24, 24)))
+                  if n_eyes >= 2: sharp += 120
                   if best is None or sharp > best[0]:
-                      best = (sharp, t, (x + w / 2) * 2)
+                      best = (sharp, t, (x + w / 2) * 2, y * 2, h * 2)
               if best is None:
-                  best = (0, b["t"], take["cx"] * 1920)
+                  best = (0, b["t"], take["cx"] * 1920, 260, 330)
                   print("no face found, using default", i)
               cx = int(min(1920 - 608, max(0, best[2] - 304)))
               r, g2, bl = take["gains"]
+              s = 1080 / 608
+              faces[i] = {"cx": (best[2] - cx) * s, "top": best[3] * s, "h": best[4] * s}
+              html = open(f"{P}/index.html").read().replace(f"PIPTOP{i}px", f"{round(190 - (best[3] + best[4] / 2) * s * 640 / 1080)}px")
+              open(f"{P}/index.html", "w").write(html)
               out.append(f"{i} {best[1]:.3f} {cx} {r} {g2} {bl}")
               print(b["name"], "time", round(best[1], 2), "crop x", cx, "sharp", round(best[0]))
           open("work/beats.txt", "w").write("\n".join(out) + "\n")
+          json.dump(faces, open("work/faces.json", "w"))
           PY
           while read i t x r g b; do
             ffmpeg -nostdin -loglevel error -y -ss "$t" -i work/raw.mp4 -frames:v 1 -vf "crop=608:1080:$x:0,scale=1080:1920:flags=lanczos,colorchannelmixer=rr=$r:gg=$g:bb=$b,eq=contrast=1.05:saturation=1.03,selectivecolor=cyans=0.2 0 0 0" -q:v 2 "$P/assets/f$i.jpg"
@@ -118,6 +128,25 @@ jobs:
             npx -y hyperframes@0.8.226 remove-background "$P/assets/f$i.jpg" -o "$P/assets/c$i.png" --device cpu < /dev/null
           done < work/beats.txt
           npx -y hyperframes@0.8.226 remove-background work/sad.jpg -o "$P/assets/sad.png" --device cpu
+          # Keep only the area around the real face, so faces in the background are not treated as the speaker
+          python3 - <<'PY'
+          import cv2, json, numpy as np, os
+          P = os.environ["P"]
+          for i, f in json.load(open("work/faces.json")).items():
+              path = f"{P}/assets/c{i}.png"
+              im = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+              H, W = im.shape[:2]
+              m = np.ones((H, W), np.float32)
+              top = int(f["top"] - 0.45 * f["h"])
+              m[: max(0, top)] = 0
+              shoulder = int(f["top"] + 1.25 * f["h"])
+              half = 0.82 * f["h"]
+              xs = np.arange(W)
+              m[:shoulder, np.abs(xs - f["cx"]) > half] = 0
+              m = cv2.GaussianBlur(m, (31, 31), 0)
+              im[:, :, 3] = (im[:, :, 3] * m).astype(np.uint8)
+              cv2.imwrite(path, im)
+          PY
           echo "Cutout seconds: $(( $(date +%s) - S ))"
 
       - name: Render the stills

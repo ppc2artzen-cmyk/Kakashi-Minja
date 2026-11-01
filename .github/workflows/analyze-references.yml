@@ -94,7 +94,7 @@ jobs:
               d = os.path.dirname(p)
               with wave.open(p) as wf:
                   a = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
-              segs, info = m.transcribe(a, word_timestamps=True, vad_filter=False, language=None if lang == "auto" else lang, beam_size=5, condition_on_previous_text=False)
+              segs, info = m.transcribe(a, word_timestamps=True, vad_filter=True, vad_parameters={"min_silence_duration_ms": 250}, language=None if lang == "auto" else lang, beam_size=5, condition_on_previous_text=False, no_speech_threshold=0.9, log_prob_threshold=-2.0, compression_ratio_threshold=3.0, initial_prompt="Hello guys, namaste, Kripa Talreja. office going person, college student, house wife, monthly expenses, work from home opportunity, link, click, form fill, move ahead.")
               words, lines = [], []
               for s in segs:
                   lines.append({"start": round(s.start, 2), "end": round(s.end, 2), "text": s.text.strip()})

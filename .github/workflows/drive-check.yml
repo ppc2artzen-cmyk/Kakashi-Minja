@@ -1,0 +1,33 @@
+name: Check Drive access
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_sha:
+        description: "SHA-256 of the expected Google account email, lowercase"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      EXPECTED: ${{ github.event.inputs.expected_sha }}
+      CID: ${{ secrets.GDRIVE_CLIENT_ID }}
+      CSEC: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+      GD_RT: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+    steps:
+      - name: Check which account and permission the key has
+        run: |
+          RT=$(printf '%s' "$GD_RT" | tr -d '[:space:]"{}')
+          ID=$(printf '%s' "$CID" | tr -d '[:space:]"')
+          SEC=$(printf '%s' "$CSEC" | tr -d '[:space:]"')
+          AT=$(curl -s https://oauth2.googleapis.com/token -d client_id="$ID" -d client_secret="$SEC" -d refresh_token="$RT" -d grant_type=refresh_token | python3 -c 'import sys,json; print(json.load(sys.stdin).get("access_token",""))')
+          [ -n "$AT" ] || { echo "Could not get an access token"; exit 1; }
+          echo "::add-mask::$AT"
+          curl -s "https://oauth2.googleapis.com/tokeninfo?access_token=$AT" | python3 -c 'import sys,json; print("Scopes:", json.load(sys.stdin).get("scope"))'
+          SHA=$(curl -s -H "Authorization: Bearer $AT" "https://www.googleapis.com/drive/v3/about?fields=user(emailAddress)" | python3 -c 'import sys,json,hashlib; print(hashlib.sha256(json.load(sys.stdin)["user"]["emailAddress"].lower().encode()).hexdigest())')
+          if [ "$SHA" = "$EXPECTED" ]; then echo "Account matches: YES"; else echo "Account matches: NO"; fi

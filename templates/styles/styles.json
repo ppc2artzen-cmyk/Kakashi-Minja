@@ -1,0 +1,41 @@
+{
+  "note": "One entry per reference video. Fonts are the closest free matches, chosen by eye. Status says what can render today.",
+  "styles": {
+    "reference-video-1": {
+      "name": "Clean Explainer",
+      "status": "style sheet only",
+      "subject": "voiceover, no person",
+      "colors": { "background": "#FFFFFF", "accent": "#1FC40F", "text": "#000000" },
+      "fonts": { "main": "Inter", "emphasis": "Instrument Serif Italic" },
+      "pace_seconds": [1, 2],
+      "graphics": ["hexagon icon with label line", "ring counter", "pill labels", "corner brackets", "review cards", "clock dial"]
+    },
+    "reference": {
+      "name": "Editorial Speaker",
+      "status": "style sheet only",
+      "subject": "speaker",
+      "colors": { "accent": "#2FD6F5", "marker": "#F07A1A", "text": "#FFFFFF" },
+      "fonts": { "main": "Inter Tight Bold Italic" },
+      "pace_seconds": [1, 3],
+      "graphics": ["gradient card", "3D object on card", "labelled image card", "full-screen cutaway", "big number"]
+    },
+    "reference-2": {
+      "name": "Premium Creator",
+      "status": "style sheet only, words behind speaker tested",
+      "subject": "speaker",
+      "colors": { "accent": "#F2762E", "text": "#FFFFFF" },
+      "fonts": { "giant": "Anton", "caption": "Inter" },
+      "pace_seconds": [2, 4],
+      "graphics": ["giant word behind speaker", "fake app screen", "search bar", "logo behind head", "background swap", "photo collage", "glass list", "white card"]
+    },
+    "reference-3": {
+      "name": "Highlighter Pop",
+      "status": "closest working version is templates/billboard-project1",
+      "subject": "speaker",
+      "colors": { "accent": "#FFD60A", "accent_text": "#000000", "text": "#FFFFFF" },
+      "fonts": { "main": "Montserrat ExtraBold Italic", "billboard_version": "Anton" },
+      "pace_seconds": [1, 2],
+      "graphics": ["highlight block", "stars", "speaker card on yellow", "fake profile screen", "question icons", "yellow line"]
+    }
+  }
+}

@@ -108,8 +108,18 @@ jobs:
           npx -y hyperframes@0.8.226 render "$P" -o out/final.mp4 --quality "$Q"
           echo "Render seconds ($Q): $(( $(date +%s) - S ))"
 
+      - name: Master the audio to -16 LUFS (one gain, video untouched)
+        run: |
+          IN=$(ffmpeg -nostdin -hide_banner -nostats -i out/final.mp4 -af loudnorm=print_format=json -f null - 2>&1 | grep input_i | sed 's/[^0-9.-]//g')
+          GAIN=$(python3 -c "print(round(-16-($IN),2))")
+          echo "input $IN LUFS, gain $GAIN dB"
+          ffmpeg -nostdin -hide_banner -nostats -y -i out/final.mp4 -map 0:v -map 0:a -c:v copy -af "volume=${GAIN}dB,alimiter=limit=0.6:level=0" -ar 48000 -c:a aac -b:a 256k -movflags +faststart out/mastered.mp4
+          mv out/mastered.mp4 out/final.mp4
+
       - name: Measure and check the result
         run: |
+          win() { echo "$1: $(ffmpeg -nostdin -hide_banner -nostats -ss "$2" -t "$3" -i out/final.mp4 -af volumedetect -f null - 2>&1 | grep -E "mean_volume|max_volume" | sed "s/.*\] //" | tr "\n" " ")" | tee -a out/check/windows.txt; }
+          win speech 3.5 2.5; win impact 10.2 0.5; win click 18.0 0.3; win ending 21.7 0.9
           ffprobe -v error -show_entries stream=codec_type,codec_name,width,height,r_frame_rate:format=duration,size -of default=nw=1 out/final.mp4 | tee out/check/info.txt
           ffmpeg -nostdin -hide_banner -nostats -i out/final.mp4 -af ebur128=peak=true -f null - 2>&1 | tail -16 | tee out/check/loudness.txt
           node -e '

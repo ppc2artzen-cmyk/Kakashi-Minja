@@ -12,7 +12,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
 .b{position:absolute;z-index:10}.f{position:absolute;z-index:40}
 .big{left:0;right:0;text-align:center;font-weight:400;font-size:400px;line-height:.98;color:#FFD60A;letter-spacing:.005em;text-shadow:0 10px 0 rgba(0,0,0,.28)}
 #w1{top:40px}#w2{top:410px}#w3{top:780px}
-.sm{font-size:300px;top:90px}.sm2{font-size:250px;top:400px}
+.sm{font-size:268px;top:90px}.sm2{font-size:236px;top:380px}
 .huge{font-size:520px}#k1{top:30px}#k2{top:520px}
 #rays{left:-500px;top:-250px;width:2080px;height:2080px;border-radius:50%;background:repeating-conic-gradient(#FFD60A 0 10deg,transparent 10deg 20deg);opacity:.92}
 .rail{left:50px;right:50px;top:1500px;text-align:center;font-size:76px;line-height:1.1;color:#fff;-webkit-text-stroke:10px #000;paint-order:stroke fill;letter-spacing:.02em}
@@ -20,7 +20,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
 .topRail{top:930px}
 .bar{left:-30px;width:1140px;top:1170px;height:260px;background:#FFD60A;transform-origin:0 50%}
 .barText{left:0;right:0;top:1180px;text-align:center;color:#000;font-size:190px;line-height:1.22;letter-spacing:.01em}
-.big2{font-size:214px;line-height:1.12}.big3{font-size:176px;line-height:1.36}
+.big2{font-size:214px;line-height:1.12}.big3{font-size:158px;line-height:1.5;white-space:nowrap}
 .chip{left:70px;display:flex;align-items:center;gap:26px;background:#FFD60A;color:#000;font-size:100px;line-height:1.16;padding:14px 40px 14px 18px;letter-spacing:.01em;white-space:nowrap}
 .chip b{display:flex;align-items:center;justify-content:center;width:104px;height:104px;background:#000;color:#FFD60A;flex:none}
 #c1{top:1040px}#c2{top:1200px}#c3{top:1360px}
@@ -28,16 +28,16 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
 #bal,#kh{left:50%;right:auto;background:#FFD60A;font-size:120px;line-height:1.2;padding:4px 44px;white-space:nowrap;margin-left:-250px}
 #kh{top:1240px;margin-left:-260px}
 #chart{left:190px;width:700px;top:1290px;height:300px;display:flex;align-items:flex-end;gap:30px;padding:30px;background:rgba(0,0,0,.72);border:4px solid #FFD60A}
-#chart i{flex:1;background:#FFD60A;height:210px;transform-origin:50% 100%}
+#chart i{flex:1;background:#FFD60A;height:236px;transform-origin:50% 100%}
 .top2{left:0;right:0;top:1040px;text-align:center;font-size:112px;line-height:1;color:#fff;-webkit-text-stroke:12px #000;paint-order:stroke fill}
 #phone{left:290px;top:1030px;width:500px;height:640px;background:#fff;border:14px solid #0b0b0b;border-radius:56px;padding:44px 30px 30px;color:#000;box-shadow:0 30px 80px rgba(0,0,0,.45)}
 .pt{display:flex;align-items:center;gap:14px;font-size:46px;line-height:1.2;letter-spacing:.02em;margin-bottom:24px}
 .fld{height:90px;background:#ececec;margin-bottom:18px;overflow:hidden}.fld u{display:block;height:100%;background:#FFD60A;transform-origin:0 50%}
 #btn{background:#000;color:#FFD60A;text-align:center;font-size:62px;line-height:1;padding:34px 8px;margin-top:40px;letter-spacing:.02em}
 #rip{left:390px;top:1395px;width:300px;height:300px;border:12px solid #FFD60A;border-radius:50%}
-#cur{left:520px;top:1400px;color:#000}#cur span{display:block;color:#000}#cur svg{fill:#fff;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
-#ar{left:445px;top:1440px;color:#FFD60A;filter:drop-shadow(0 6px 0 #000)}
-#cta{top:1660px}
+#cur{left:640px;top:1500px;color:#000}#cur span{display:block;color:#000}#cur svg{fill:#fff;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
+#ar{left:445px;top:1445px;color:#FFD60A;filter:drop-shadow(0 6px 0 #000)}
+#cta{top:1640px}
 .whip{position:absolute;z-index:60;left:-80px;top:0;width:1240px;height:1920px;background:#FFD60A}
 </style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="22.69" data-width="1080" data-height="1920" data-fps="30">
@@ -138,7 +138,7 @@ rise("#agar",2.73);chip("#c1",3.53);chip("#c2",4.91);chip("#c3",6.03);
 // 3 expenses
 slam("#mo1",7.29);slam("#mo2",7.59);shake(7.29,8);
 tl.fromTo("#chart",{y:380},{y:0,duration:.3,ease:"power4.out"},8.48);
-[["#h1",.95],["#h2",.5],["#h3",.28],["#h4",.72]].forEach(([s,v])=>{tl.set(s,{scaleY:v},8.48);tl.to(s,{scaleY:.62,duration:.42,ease:"power3.inOut"},8.93);});
+[["#h1",.95],["#h2",.5],["#h3",.28],["#h4",.72]].forEach(([s,v])=>{tl.set(s,{scaleY:v},8.48);tl.to(s,{scaleY:.8,duration:.42,ease:"power3.inOut"},8.93);});
 slam("#bal",8.93);
 // 4 hero: work from home, words land on her voice
 slam("#w1",10.22);shake(10.22,12);slam("#w2",10.38);slam("#w3",10.54);shake(10.54,10);rise("#sr",10.84);

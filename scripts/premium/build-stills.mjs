@@ -23,21 +23,21 @@ const beats = [
   { t: 2.5, name: "Caption, VFX, sound effect", front:
       `<div class="stack">${b("card on", '<span class="ic">Aa</span>CAPTION')}${b("card", '<span class="ic">&#10022;</span>VFX')}${b("card", '<span class="ic wave"><i></i><i></i><i></i><i></i><i></i></span>SOUND EFFECT')}</div>` + rail("AISE", "") },
   { t: 4.6, name: "Greeting and emoji", front: b("emoji", "&#128075;", "left:90px;top:640px") + rail("SO HI GUYS", "") },
-  { t: 5.45, name: "Name behind him, face highlighted", dim: true, behind: b("giant", "MANISH", "top:210px;font-size:372px;color:#F7EEDD"), ring: true,
+  { t: 5.45, name: "Name behind him, face highlighted", dim: true, behind: b("giant", "MANISH", "top:40px;font-size:318px;color:#F7EEDD"), ring: true,
     front: b("tag", "MANISH", "top:1190px;left:330px") + rail("MY NAME IS", "") },
   { t: 6.5, name: "Seventh day", front: `<div class="cal"><div class="calT">DAY</div><div class="calN">7</div></div>` + rail("IT'S MY", "7TH DAY") },
-  { t: 7.75, name: "10 lakh with money images", bg: "assets/rupee.jpg", behind: b("giant", `${RUPEE}10 LAKH`, "top:210px;font-size:300px;color:#F7EEDD"),
-    front: b("emoji", "&#128176;", "left:800px;top:930px") + rail("MAKING", "RUPEES") },
+  { t: 7.75, name: "10 lakh with money images", bg: "assets/rupee.jpg", behind: b("giant", `${RUPEE}10 LAKH`, "top:50px;font-size:252px;color:#F7EEDD") + `<div class="photo mid" style="left:-30px;top:640px;transform:rotate(-7deg)"><img src="assets/hand.jpg" alt="" /></div><div class="photo mid" style="left:730px;top:690px;transform:rotate(6deg)"><img src="assets/rupee.jpg" alt="" /></div>`,
+    front: b("emoji", "&#128176;", "left:60px;top:1110px") + rail("MAKING", "RUPEES") },
   { t: 8.75, name: "Coaching business", front: `<div class="photo" style="left:640px;top:210px"><img src="assets/hand.jpg" alt="" /></div>` + rail("WITH MY", "COACHING BUSINESS") },
-  { t: 10.5, name: "18 hours, sad person", behind: b("giant", "18 GHANTE", "top:90px;font-size:330px;color:#7E1434"),
-    front: `<img class="sad" src="assets/sad.png" alt="" />` + b("emoji", "&#128553;", "left:60px;top:780px;font-size:150px") + rail("YE SKILL BANANE MEIN", "18 GHANTE LAGE") },
+  { t: 10.5, name: "18 hours, sad person", behind: b("giant", "18 GHANTE", "top:50px;font-size:236px;color:#7E1434") + `<img class="sad" src="assets/sad.png" alt="" />`,
+    front: b("emoji", "&#128553;", "left:50px;top:600px;font-size:150px") + rail("YE SKILL BANANE MEIN", "18 GHANTE LAGE") },
   { t: 12.2, name: "I save your time", front:
-      `<div class="clock"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="cb"/><circle cx="50" cy="50" r="44" class="cf" pathLength="100"/><path d="M50 50V18M50 50l20 12" class="ch"/></svg></div>` + rail("BUT AAPKA", "TIME SAVE") },
-  { t: 13.7, name: "Comment SKILLS", front:
+      `<div class="clock" style="left:46px;top:900px;width:320px;height:320px"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="cb"/><circle cx="50" cy="50" r="44" class="cf" pathLength="100"/><path d="M50 50V18M50 50l20 12" class="ch"/></svg></div>` + rail("BUT AAPKA", "TIME SAVE") },
+  { t: 13.7, name: "Comment SKILLS", card: true, front:
       `<div class="phone"><div class="pHead">Comments</div><div class="line"><b></b><u style="width:70%"></u></div><div class="line"><b></b><u style="width:52%"></u></div><div class="line"><b></b><u style="width:62%"></u></div><div class="input">SKILLS<span class="send">&#10148;</span></div></div>` + rail("MUJHE BAS", "COMMENT KARO") },
-  { t: 15.9, name: "Links in your DMs", front:
+  { t: 15.9, name: "Links in your DMs", card: true, front:
       `<div class="phone"><div class="pHead">Messages</div><div class="bub">SKILLS</div><div class="bub me">Yeh rahe saare links</div><div class="lnk"><i></i>Link 1</div><div class="lnk"><i></i>Link 2</div><div class="lnk"><i></i>Link 3</div></div>` + rail("AAPKI DMS MEIN", "SAARE LINKS") },
-  { t: 18.0, name: "Edit professionally", behind: b("giant", "PRO", "top:150px;font-size:560px;color:#7E1434"),
+  { t: 18.0, name: "Edit professionally", behind: b("giant", "PRO EDIT", "top:50px;font-size:300px;color:#7E1434"),
     front: `<div class="stars">&#9733; &#9733; &#9733; &#9733; &#9733;</div>` + rail("PHIR AAP BHI EK", "PROFESSIONALLY EDIT") },
 ];
 
@@ -49,14 +49,18 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden}
 .beat{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden}
 .base,.cut,.bgi{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
-.base{z-index:1}.bgi{z-index:2}.tint{position:absolute;inset:0;z-index:3;background:linear-gradient(180deg,rgba(60,6,24,.55),rgba(60,6,24,.25) 50%,rgba(20,2,8,.75))}
+.base{z-index:1}.bgi{z-index:2}.tint{position:absolute;inset:0;z-index:3;background:rgba(50,6,20,.72)}
+.card-bg{position:absolute;inset:0;z-index:32;background:radial-gradient(circle at 50% 30%,#8E1B3D 0%,#4E0B22 58%,#23040F 100%)}
+.pip{position:absolute;z-index:47;left:350px;top:1490px;width:380px;height:380px;border-radius:50%;overflow:hidden;border:8px solid #F7EEDD;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.pip img{position:absolute;width:640px;height:1138px;left:-130px;top:-70px;max-width:none}
 .dim{position:absolute;inset:0;z-index:4;background:rgba(34,4,14,.74)}
 .cut{z-index:30}
-.grade{position:absolute;inset:0;z-index:35;background:radial-gradient(ellipse at 50% 38%,transparent 52%,rgba(16,4,8,.5) 100%),linear-gradient(180deg,transparent 62%,rgba(16,4,8,.72) 100%)}
+.grade{position:absolute;inset:0;z-index:31;background:radial-gradient(ellipse at 50% 38%,transparent 56%,rgba(16,4,8,.4) 100%),linear-gradient(180deg,transparent 68%,rgba(16,4,8,.5) 100%)}
 .ringGlow{position:absolute;z-index:6;left:190px;top:320px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(247,238,221,.34) 0%,rgba(247,238,221,.1) 55%,transparent 72%);border:6px solid rgba(247,238,221,.5)}
 .giant{position:absolute;z-index:10;left:0;right:0;text-align:center;font-family:"Anton",sans-serif;font-weight:400;line-height:1;white-space:nowrap;letter-spacing:.005em;display:flex;justify-content:center;align-items:center;gap:8px}
 .rs{height:.72em;width:.72em;flex:none}
-.rail{position:absolute;z-index:45;left:50px;right:50px;top:1340px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.card-rail{}
+.rail{position:absolute;z-index:45;left:50px;right:50px;top:1290px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
 .sm{font:800 48px/1.1 "Sora",sans-serif;color:#fff;letter-spacing:.02em;text-shadow:0 3px 14px rgba(0,0,0,.7)}
 .chip{font:400 112px/1.18 "Anton",sans-serif;color:#fff;background:#7E1434;padding:6px 38px 10px;border-radius:14px;letter-spacing:.015em;white-space:nowrap;box-shadow:0 18px 40px rgba(40,4,16,.45);border:3px solid rgba(247,238,221,.28)}
 .emoji{position:absolute;z-index:46;font-size:190px;line-height:1;font-family:"Noto Color Emoji",sans-serif}
@@ -69,12 +73,13 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
 .cal{position:absolute;z-index:46;left:70px;top:150px;width:300px;border-radius:30px;overflow:hidden;background:#F7EEDD;box-shadow:0 24px 50px rgba(0,0,0,.4);text-align:center}
 .calT{background:#7E1434;color:#fff;font:800 44px/1 "Sora",sans-serif;padding:20px;letter-spacing:.14em}
 .calN{font:400 210px/1.12 "Anton",sans-serif;color:#7E1434}
+.photo.mid{z-index:20;width:360px;height:440px}
 .photo{position:absolute;z-index:46;width:380px;height:470px;border-radius:28px;overflow:hidden;border:6px solid #F7EEDD;box-shadow:0 26px 60px rgba(0,0,0,.45)}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
-.sad{position:absolute;z-index:44;left:-30px;top:640px;width:640px;height:800px;object-fit:contain;object-position:left bottom;filter:saturate(.45) brightness(.95)}
+.sad{position:absolute;z-index:20;left:-300px;top:420px;width:1200px;height:900px;object-fit:contain;object-position:left bottom;filter:saturate(.55)}
 .clock{position:absolute;z-index:46;left:40px;top:760px;width:380px;height:380px;background:rgba(30,6,14,.7);border-radius:50%}
 .clock svg{width:100%;height:100%}.cb,.cf,.ch{fill:none;stroke-linecap:round}.cb{stroke:rgba(247,238,221,.3);stroke-width:7}.cf{stroke:#F7EEDD;stroke-width:7;stroke-dasharray:72 100;transform:rotate(-90deg);transform-origin:50% 50%}.ch{stroke:#fff;stroke-width:5}
-.phone{position:absolute;z-index:46;left:90px;top:330px;width:440px;height:880px;border-radius:64px;background:#fff;border:14px solid #120c0e;padding:66px 26px 26px;box-shadow:0 34px 70px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:20px;color:#111}
+.phone{position:absolute;z-index:46;left:300px;top:150px;width:480px;height:940px;border-radius:64px;background:#fff;border:14px solid #120c0e;padding:66px 26px 26px;box-shadow:0 34px 70px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:20px;color:#111}
 .pHead{font:800 38px/1 "Sora",sans-serif;margin-bottom:10px}
 .line{display:flex;align-items:center;gap:16px}.line b{width:62px;height:62px;border-radius:50%;background:#dcdcdc;flex:none}.line u{display:block;height:20px;border-radius:10px;background:#e4e4e4;text-decoration:none}
 .input{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font:800 42px/1 "Sora",sans-serif;background:#F7EEDD;color:#7E1434;border:4px solid #7E1434;padding:24px 26px;border-radius:999px}
@@ -92,8 +97,9 @@ const beatHtml = beats.map((x, i) => `
   ${x.dim ? '<div class="dim"></div>' : ""}
   ${x.ring ? '<div class="ringGlow"></div>' : ""}
   ${x.behind || ""}
-  <img class="cut" src="assets/c${i}.png" alt="" />
   <div class="grade"></div>
+  <img class="cut" src="assets/c${i}.png" alt="" />
+  ${x.card ? `<div class="card-bg"></div><div class="pip"><img src="assets/f${i}.jpg" alt="" /></div>` : ""}
   ${x.front || ""}
 </div>`).join("\n");
 

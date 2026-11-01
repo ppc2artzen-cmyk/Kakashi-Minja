@@ -64,16 +64,45 @@ jobs:
           cp work/rupee.jpg work/hand.jpg "$P/assets/"
           cp templates/look-tests/fonts/anton-latin-400-normal.woff2 templates/look-tests/fonts/sora-latin-800-normal.woff2 "$P/assets/fonts/"
 
-      - name: Color match each take and grab the frames
+      - name: Pick the sharpest frame, track the face, match color
         run: |
-          node -e '
-            const p=require(process.env.P.replace(/^/,"./")+"/plan.json");
-            const lines=p.beats.map((b,i)=>{const k=p.takes.find(t=>b.t>=t.from&&b.t<t.to);const x=Math.round(Math.min(1920-608,Math.max(0,k.cx*1920-304)));
-              const [r,g,bl]=k.gains;return [i,b.t,x,r,g,bl].join(" ")});
-            console.log(lines.join("\n"));
-          ' > work/beats.txt
+          pip install -q opencv-python-headless numpy
+          python3 - <<'PY'
+          import cv2, json, os
+          P = os.environ["P"]
+          plan = json.load(open(f"{P}/plan.json"))
+          cap = cv2.VideoCapture("work/raw.mp4")
+          fps = cap.get(cv2.CAP_PROP_FPS)
+          face = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+          out = []
+          for i, b in enumerate(plan["beats"]):
+              take = next(k for k in plan["takes"] if k["from"] <= b["t"] < k["to"])
+              best = None
+              for off in [x * 0.05 for x in range(-7, 8)]:
+                  t = b["t"] + off
+                  if not take["from"] + 0.03 <= t < take["to"] - 0.03: continue
+                  cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
+                  ok, fr = cap.read()
+                  if not ok: continue
+                  g = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
+                  fs = face.detectMultiScale(cv2.resize(g, (960, 540)), 1.1, 6, minSize=(50, 50))
+                  if not len(fs): continue
+                  x, y, w, h = max(fs, key=lambda r: r[2] * r[3])
+                  c = g[max(0, y * 2):(y + h) * 2, max(0, x * 2):(x + w) * 2]
+                  sharp = cv2.Laplacian(c, cv2.CV_64F).var() - abs(off) * 30
+                  if best is None or sharp > best[0]:
+                      best = (sharp, t, (x + w / 2) * 2)
+              if best is None:
+                  best = (0, b["t"], take["cx"] * 1920)
+                  print("no face found, using default", i)
+              cx = int(min(1920 - 608, max(0, best[2] - 304)))
+              r, g2, bl = take["gains"]
+              out.append(f"{i} {best[1]:.3f} {cx} {r} {g2} {bl}")
+              print(b["name"], "time", round(best[1], 2), "crop x", cx, "sharp", round(best[0]))
+          open("work/beats.txt", "w").write("\n".join(out) + "\n")
+          PY
           while read i t x r g b; do
-            ffmpeg -nostdin -loglevel error -y -ss "$t" -i work/raw.mp4 -frames:v 1 -vf "crop=608:1080:$x:0,scale=1080:1920:flags=lanczos,colorchannelmixer=rr=$r:gg=$g:bb=$b,eq=contrast=1.08:saturation=1.04:gamma=0.98,selectivecolor=cyans=0.14 0 0 0" -q:v 2 "$P/assets/f$i.jpg"
+            ffmpeg -nostdin -loglevel error -y -ss "$t" -i work/raw.mp4 -frames:v 1 -vf "crop=608:1080:$x:0,scale=1080:1920:flags=lanczos,colorchannelmixer=rr=$r:gg=$g:bb=$b,eq=contrast=1.05:saturation=1.03,selectivecolor=cyans=0.2 0 0 0" -q:v 2 "$P/assets/f$i.jpg"
             ffmpeg -nostdin -loglevel error -y -ss "$t" -i work/raw.mp4 -frames:v 1 -vf "crop=608:1080:$x:0,scale=540:-2" -q:v 3 "out/color/before_$i.jpg"
             ffmpeg -nostdin -loglevel error -y -i "$P/assets/f$i.jpg" -vf "scale=540:-2" -q:v 3 "out/color/after_$i.jpg"
           done < work/beats.txt

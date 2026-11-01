@@ -34,7 +34,7 @@ jobs:
         run: |
           python -m venv work/ytdlp && work/ytdlp/bin/pip install -q "yt-dlp==2026.10.26"
           work/ytdlp/bin/yt-dlp --version
-          work/ytdlp/bin/yt-dlp --no-playlist -o work/dl.%(ext)s "https://assets.mixkit.co/music/130/130.mp3"
+          work/ytdlp/bin/yt-dlp --no-playlist -o "work/dl.%(ext)s" "https://assets.mixkit.co/music/130/130.mp3"
           ls -l work/dl.*
 
       - name: auto-editor

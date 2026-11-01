@@ -1,0 +1,172 @@
+name: Render Premium Creator final
+
+# draft: quick test and check frames. final: full quality, uploaded to Drive. Files are kept 1 day: this repo is public.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [draft, final]
+        default: draft
+      drive_file_id:
+        description: "Google Drive file ID of the raw video"
+        required: true
+      output_folder_id:
+        description: "Drive folder ID for the final video"
+        required: true
+        default: "1gIlN3SOC2NVU99BPSZiFjcaGXqGMI6hI"
+      name:
+        description: "Label for the output file (no spaces)"
+        required: true
+        default: "manish-premium-burgundy"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      HYPERFRAMES_NO_TELEMETRY: "1"
+      DO_NOT_TRACK: "1"
+      MODE: ${{ github.event.inputs.mode }}
+      FILE_ID: ${{ github.event.inputs.drive_file_id }}
+      OUT_FOLDER: ${{ github.event.inputs.output_folder_id }}
+      LABEL: ${{ github.event.inputs.name }}
+      P: templates/premium-final
+      PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+      RCLONE_CONFIG_GD_TYPE: drive
+      RCLONE_CONFIG_GD_SCOPE: drive
+      GD_CID: ${{ secrets.GDRIVE_CLIENT_ID }}
+      GD_CSEC: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+      GD_RT: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg rclone fonts-noto-color-emoji
+          pip install -q "opencv-python-headless==4.10.0.84" "numpy<2"
+
+      - name: Set up Drive login and download the video
+        run: |
+          RT=$(printf '%s' "$GD_RT" | tr -d '[:space:]"{}')
+          CID=$(printf '%s' "$GD_CID" | tr -d '[:space:]"')
+          CSEC=$(printf '%s' "$GD_CSEC" | tr -d '[:space:]"')
+          echo "::add-mask::$RT"
+          {
+            echo "RCLONE_CONFIG_GD_CLIENT_ID=$CID"
+            echo "RCLONE_CONFIG_GD_CLIENT_SECRET=$CSEC"
+            echo "RCLONE_CONFIG_GD_TOKEN={\"access_token\":\"\",\"token_type\":\"Bearer\",\"refresh_token\":\"$RT\",\"expiry\":\"2000-01-01T00:00:00Z\"}"
+          } >> "$GITHUB_ENV"
+          export RCLONE_CONFIG_GD_CLIENT_ID="$CID" RCLONE_CONFIG_GD_CLIENT_SECRET="$CSEC" RCLONE_CONFIG_GD_TOKEN="{\"access_token\":\"\",\"token_type\":\"Bearer\",\"refresh_token\":\"$RT\",\"expiry\":\"2000-01-01T00:00:00Z\"}"
+          mkdir -p work out/check "$P/assets/fonts" "$P/assets/sfx"
+          rclone backend copyid GD: "$FILE_ID" work/raw.mp4 --drive-acknowledge-abuse
+
+      - name: Track the face, reframe and match color
+        run: |
+          python3 scripts/premium/prepare_clip.py work/raw.mp4 "$P/plan.json" work/clip_v.mp4 work/track.json
+          ffmpeg -nostdin -loglevel error -y -i work/clip_v.mp4 -i work/raw.mp4 -map 0:v -map 1:a -c:v copy -af "loudnorm=I=-17:TP=-3:LRA=9,aresample=48000" -c:a aac -b:a 256k -shortest "$P/assets/clip.mp4"
+          B=$(node -e 'console.log(require(process.env.P.replace(/^/,"./")+"/plan.json").blurAt)')
+          ffmpeg -nostdin -loglevel error -y -ss "$B" -i "$P/assets/clip.mp4" -frames:v 1 -vf "boxblur=26:2,eq=brightness=-0.16" -q:v 2 "$P/assets/blur.jpg"
+
+      - name: Download stock images
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.parse, urllib.request
+          key = os.environ["PIXABAY_API_KEY"].strip()
+          for name, i in {"rupee": 4398432, "hand": 2459328, "sad": 10202054}.items():
+              u = "https://pixabay.com/api/?" + urllib.parse.urlencode({"key": key, "id": i})
+              x = json.load(urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "kakashi-minja"}), timeout=30))["hits"][0]
+              data = urllib.request.urlopen(urllib.request.Request(x["largeImageURL"], headers={"User-Agent": "kakashi-minja"}), timeout=60).read()
+              open(f"work/{name}.jpg", "wb").write(data)
+              print(name, i, x["pageURL"])
+          PY
+          cp work/rupee.jpg work/hand.jpg "$P/assets/"
+          cp templates/look-tests/fonts/anton-latin-400-normal.woff2 templates/look-tests/fonts/sora-latin-800-normal.woff2 "$P/assets/fonts/"
+          cp -r .claude/skills/pro-edit/sound-effects/sfx/* "$P/assets/sfx/"
+          rm -f "$P/assets/sfx/manifest.json"
+          npx -y hyperframes@0.8.226 remove-background work/sad.jpg -o "$P/assets/sad.png" --device cpu
+
+      - name: Cut the speaker out only where words go behind him
+        run: |
+          S=$(date +%s)
+          node -e 'const p=require(process.env.P.replace(/^/,"./")+"/plan.json");p.cuts.forEach(([a,b],i)=>console.log(i,a,(b-a).toFixed(3)))' > work/cuts.txt
+          while read i a d; do
+            ffmpeg -nostdin -loglevel error -y -ss "$a" -t "$d" -i "$P/assets/clip.mp4" -an -c:v libx264 -crf 15 -pix_fmt yuv420p "work/seg$i.mp4" < /dev/null
+            npx -y hyperframes@0.8.226 remove-background "work/seg$i.mp4" -o "work/seg$i.webm" --device cpu < /dev/null
+            mkdir -p "work/f$i"
+            ffmpeg -nostdin -loglevel error -y -c:v libvpx-vp9 -i "work/seg$i.webm" -pix_fmt rgba "work/f$i/%05d.png" < /dev/null
+            python3 scripts/premium/mask_cutout.py "work/f$i" work/track.json "$a"
+            ffmpeg -nostdin -loglevel error -y -framerate 30 -i "work/f$i/%05d.png" -c:v libvpx-vp9 -pix_fmt yuva420p -crf 24 -b:v 0 -auto-alt-ref 0 -row-mt 1 -cpu-used 4 "$P/assets/cut$i.webm" < /dev/null
+          done < work/cuts.txt
+          echo "Cutout seconds: $(( $(date +%s) - S ))"
+
+      - name: Place the small circle on the face
+        run: |
+          python3 - <<'PY'
+          import json, os
+          P = os.environ["P"]
+          plan = json.load(open(f"{P}/plan.json"))
+          tr = json.load(open("work/track.json"))
+          html = open(f"{P}/index.html").read()
+          for i, (a, b) in enumerate(plan["pips"]):
+              lo, hi = int(a * tr["fps"]), int(b * tr["fps"])
+              n = hi - lo
+              cy = sum(tr["top"][j] + tr["h"][j] / 2 for j in range(lo, min(hi, len(tr["top"])))) / max(1, n)
+              html = html.replace(f"PIPTOP{i}px", f"{round(190 - cy * 640 / 1080)}px")
+          open(f"{P}/index.html", "w").write(html)
+          PY
+          npx -y hyperframes@0.8.226 check "$P" --json > out/check/check.json || true
+
+      - name: Render
+        run: |
+          S=$(date +%s)
+          if [ "$MODE" = "draft" ]; then Q=draft; else Q=delivery; fi
+          npx -y hyperframes@0.8.226 render "$P" -o out/render.mp4 --quality "$Q"
+          echo "Render seconds ($Q): $(( $(date +%s) - S ))"
+
+      - name: Master the audio to -16 LUFS (one gain, video untouched)
+        run: |
+          IN=$(ffmpeg -nostdin -hide_banner -nostats -i out/render.mp4 -af loudnorm=print_format=json -f null - 2>&1 | grep input_i | sed 's/[^0-9.-]//g')
+          GAIN=$(python3 -c "print(round(-16-($IN),2))")
+          echo "input $IN LUFS, gain $GAIN dB"
+          ffmpeg -nostdin -hide_banner -nostats -y -i out/render.mp4 -map 0:v -map 0:a -c:v copy -af "volume=${GAIN}dB,alimiter=limit=0.6:level=0" -ar 48000 -c:a aac -b:a 256k -movflags +faststart out/final.mp4
+          rm -f out/render.mp4
+
+      - name: Measure and check the result
+        run: |
+          ffprobe -v error -show_entries stream=codec_type,codec_name,width,height,r_frame_rate:format=duration,size -of default=nw=1 out/final.mp4 | tee out/check/info.txt
+          ffmpeg -nostdin -hide_banner -nostats -i out/final.mp4 -af ebur128=peak=true -f null - 2>&1 | tail -16 | tee out/check/loudness.txt
+          node -e 'const p=require(process.env.P.replace(/^/,"./")+"/plan.json");p.beats.forEach(([t,n])=>console.log(n,t))' > out/check/times.txt
+          while read n t; do
+            ffmpeg -nostdin -loglevel error -y -ss "$t" -i out/final.mp4 -frames:v 1 -vf "scale=540:-2" -q:v 3 "out/check/$n.jpg"
+          done < out/check/times.txt
+
+      - name: Upload the final to Drive
+        if: env.MODE == 'final'
+        run: |
+          STAMP=$(TZ=Asia/Kolkata date +%Y-%m-%d_%H%M)
+          NAME="${STAMP}_${LABEL}_final.mp4"
+          cp out/final.mp4 "out/$NAME"
+          rclone copy "out/$NAME" GD: --drive-root-folder-id "$OUT_FOLDER" -v
+          echo "$NAME" | tee out/check/drive-name.txt
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: premium-${{ env.MODE }}
+          path: |
+            out/check
+            out/final.mp4
+          retention-days: 1

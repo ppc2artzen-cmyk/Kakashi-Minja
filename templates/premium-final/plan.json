@@ -1,0 +1,143 @@
+{
+ "takes": [
+  {
+   "from": 0,
+   "to": 4.233,
+   "gains": [
+    0.987,
+    0.951,
+    0.943
+   ]
+  },
+  {
+   "from": 4.233,
+   "to": 9.5,
+   "gains": [
+    1.027,
+    1.006,
+    1.02
+   ]
+  },
+  {
+   "from": 9.5,
+   "to": 15.033,
+   "gains": [
+    1.0625,
+    1.068,
+    1.119
+   ]
+  },
+  {
+   "from": 15.033,
+   "to": 99,
+   "gains": [
+    0.89,
+    0.862,
+    0.872
+   ]
+  }
+ ],
+ "cuts": [
+  [
+   5,
+   5.95
+  ],
+  [
+   7.3,
+   8.2
+  ],
+  [
+   17.6,
+   19.5
+  ]
+ ],
+ "pips": [
+  [
+   9.44,
+   11.1
+  ],
+  [
+   12.84,
+   16.78
+  ]
+ ],
+ "beats": [
+  [
+   1.2,
+   "b1"
+  ],
+  [
+   2.5,
+   "b2"
+  ],
+  [
+   4.7,
+   "b3"
+  ],
+  [
+   5.55,
+   "b4"
+  ],
+  [
+   6.6,
+   "b5"
+  ],
+  [
+   7.8,
+   "b6"
+  ],
+  [
+   8.95,
+   "b7"
+  ],
+  [
+   10.6,
+   "b8"
+  ],
+  [
+   12.2,
+   "b9"
+  ],
+  [
+   14.5,
+   "b10"
+  ],
+  [
+   16.4,
+   "b11"
+  ],
+  [
+   18.4,
+   "b12"
+  ]
+ ],
+ "sfx": [
+  "pop/fs-258269-mouth-pop.ogg",
+  "click/fs788933.ogg",
+  "click/kenney-interface-select-001.ogg",
+  "click/kenney-interface-select-003.ogg",
+  "pop/fs-447910-plop.ogg",
+  "impact/kenney-impact-impactpunch-heavy-000.ogg",
+  "pop/fs-824189-pop-in-sfx.ogg",
+  "ding/kenney-interface-confirmation-001.ogg",
+  "whoosh/fs-683101-quick-woosh.ogg",
+  "impact/fs-177242-cinematic-impact.ogg",
+  "ding/kenney-interface-glass-001.ogg",
+  "ding/kenney-interface-glass-002.ogg",
+  "pop/fs527522.ogg",
+  "whoosh/fs810485.ogg",
+  "impact/kenney-impact-impactsoft-heavy-001.ogg",
+  "tick/fs528561.ogg",
+  "ding/kenney-interface-confirmation-002.ogg",
+  "whoosh/fs830856.ogg",
+  "typing/fs-416777-digital-typing-wav.ogg",
+  "transition/fs-786514-swoosh-v2.ogg",
+  "ding/kenney-interface-confirmation-003.ogg",
+  "click/kenney-interface-click-001.ogg",
+  "click/kenney-interface-select-002.ogg",
+  "tick/fs384187.ogg",
+  "whoosh/fs393811.ogg",
+  "impact/kenney-impact-impactsoft-heavy-000.ogg"
+ ],
+ "blurAt": 10.5
+}

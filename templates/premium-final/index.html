@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Anton";src:url("assets/fonts/anton-latin-400-normal.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Sora";src:url("assets/fonts/sora-latin-800-normal.woff2") format("woff2");font-weight:800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden}
+#cam{position:absolute;inset:0;transform-origin:50% 36%}
+#base{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:1}
+.cut{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;z-index:30}
+#grade{position:absolute;inset:0;z-index:29;background:radial-gradient(ellipse at 50% 38%,transparent 56%,rgba(16,4,8,.4) 100%),linear-gradient(180deg,transparent 68%,rgba(16,4,8,.5) 100%)}
+.dimL{position:absolute;inset:0;z-index:4;background:rgba(34,4,14,.74)}
+.ringGlow{position:absolute;z-index:6;left:190px;top:210px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(247,238,221,.34) 0%,rgba(247,238,221,.1) 55%,transparent 72%);border:6px solid rgba(247,238,221,.5)}
+.mBg{position:absolute;inset:0;z-index:5}.mBg img{width:100%;height:100%;object-fit:cover;display:block}.tint{position:absolute;inset:0;background:rgba(50,6,20,.76)}
+.notes{position:absolute;inset:0;z-index:7}
+.note{position:absolute;top:-120px;width:150px;height:76px;background:#E9E2CC;border:4px solid #7E1434;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#7E1434;font:800 44px/1 "Sora",sans-serif}
+.giant{position:absolute;z-index:10;left:0;right:0;font-family:"Anton",sans-serif;font-weight:400;line-height:1;white-space:nowrap;display:flex;justify-content:center;align-items:center;gap:8px;letter-spacing:.005em}
+.gNm{top:60px;font-size:330px;color:#F7EEDD}.gLk{top:50px;font-size:252px;color:#F7EEDD}.gPr{top:50px;font-size:300px;color:#7E1434}
+.g18{top:50px;font-size:236px;color:#F7EEDD}.giant.top{z-index:42}
+.rs{height:.72em;width:.72em;flex:none}
+.photo{position:absolute;z-index:46;width:380px;height:470px;border-radius:28px;overflow:hidden;border:6px solid #F7EEDD;box-shadow:0 26px 60px rgba(0,0,0,.45)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.mid{z-index:20;width:360px;height:440px}.pa{left:-30px;top:640px}.pb{left:730px;top:690px}.pc{left:640px;top:210px}
+.sm{position:absolute;z-index:45;left:50px;right:50px;text-align:center;font:800 48px/1.1 "Sora",sans-serif;color:#fff;letter-spacing:.02em;text-shadow:0 3px 14px rgba(0,0,0,.7)}
+.one{top:1290px}
+.chip{position:absolute;z-index:45;left:50%;top:1356px;font:400 112px/1.18 "Anton",sans-serif;color:#fff;background:#7E1434;padding:6px 38px 10px;border-radius:14px;letter-spacing:.015em;white-space:nowrap;box-shadow:0 18px 40px rgba(40,4,16,.45);border:3px solid rgba(247,238,221,.28);transform-origin:50% 50%}
+.emoji{position:absolute;z-index:46;font-size:190px;line-height:1;font-family:"Noto Color Emoji",sans-serif}
+.eW{left:90px;top:640px}.eM{left:60px;top:1110px}.eS{left:90px;top:400px;font-size:150px}
+.stack{position:absolute;z-index:46;left:150px;right:150px;top:1380px;display:grid;gap:22px}
+.card{display:flex;align-items:center;gap:30px;font:800 54px/1 "Sora",sans-serif;color:#fff;padding:24px 30px;border-radius:24px;background:rgba(30,6,14,.62);border:2px solid rgba(247,238,221,.4)}
+.ic{display:flex;align-items:center;justify-content:center;width:82px;height:82px;border-radius:18px;background:#F7EEDD;color:#7E1434;font:800 42px/1 "Sora",sans-serif;flex:none;gap:5px}
+.wave i{display:block;width:7px;background:#7E1434;border-radius:4px}.wave i:nth-child(1){height:22px}.wave i:nth-child(2){height:48px}.wave i:nth-child(3){height:34px}.wave i:nth-child(4){height:56px}.wave i:nth-child(5){height:26px}
+.cal{position:absolute;z-index:46;left:70px;top:150px;width:300px;border-radius:30px;overflow:hidden;background:#F7EEDD;box-shadow:0 24px 50px rgba(0,0,0,.4);text-align:center}
+.calT{background:#7E1434;color:#fff;font:800 44px/1 "Sora",sans-serif;padding:20px;letter-spacing:.14em}.calN{font:400 210px/1.12 "Anton",sans-serif;color:#7E1434}
+.sadB{position:absolute;inset:0;z-index:40}.sadB img{width:100%;height:100%;object-fit:cover;display:block}
+.sadP{position:absolute;z-index:41;left:-260px;top:345px;width:1600px;height:1000px}.sadP img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
+.clock{position:absolute;z-index:46;left:46px;top:900px;width:320px;height:320px;background:rgba(30,6,14,.7);border-radius:50%}
+.clock svg{width:100%;height:100%;display:block}.cb,.cf,.ch{fill:none;stroke-linecap:round}.cb{stroke:rgba(247,238,221,.3);stroke-width:7}.cf{stroke:#F7EEDD;stroke-width:7;stroke-dasharray:100;transform:rotate(-90deg);transform-origin:50% 50%}.ch{stroke:#fff;stroke-width:5}
+#cm{transform-origin:50% 50%;transform-box:view-box}
+.cardBg{position:absolute;inset:0;z-index:40;background:radial-gradient(circle at 50% 30%,#8E1B3D 0%,#4E0B22 58%,#23040F 100%)}
+.phone{position:absolute;z-index:44;left:300px;top:150px;width:480px;height:940px;border-radius:64px;background:#fff;border:14px solid #120c0e;padding:66px 26px 26px;box-shadow:0 34px 70px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:20px;color:#111}
+.pHead{font:800 38px/1 "Sora",sans-serif;margin-bottom:10px}
+.line{display:flex;align-items:center;gap:16px}.line b{width:62px;height:62px;border-radius:50%;background:#dcdcdc;flex:none}.line u{display:block;height:20px;border-radius:10px;background:#e4e4e4;text-decoration:none}
+.input{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font:800 42px/1 "Sora",sans-serif;background:#F7EEDD;color:#7E1434;border:4px solid #7E1434;padding:24px 26px;border-radius:999px}
+#typed{display:inline-block;overflow:hidden;white-space:nowrap;width:190px}
+.bub{align-self:flex-end;background:#e9e9ea;font:800 30px/1.2 "Sora",sans-serif;padding:18px 24px;border-radius:26px}.bub.me{align-self:flex-start;background:#7E1434;color:#fff}
+.lnk{display:flex;align-items:center;gap:16px;font:800 28px/1 "Sora",sans-serif;background:#F7EEDD;color:#7E1434;padding:22px;border-radius:20px}.lnk i{width:30px;height:30px;border-radius:50%;background:#7E1434;display:block}
+.pipWrap{position:absolute;z-index:47;left:350px;top:1490px;width:380px;height:380px;border-radius:50%;overflow:hidden;border:8px solid #F7EEDD;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.pipV{position:absolute;width:640px;height:1138px;left:-130px;max-width:none}
+.whip{position:absolute;z-index:60;left:-80px;top:0;width:1240px;height:1920px;background:#7E1434}
+</style></head><body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="19.5" data-width="1080" data-height="1920" data-fps="30">
+  <div id="cam">
+    <video id="base" class="clip" data-start="0" data-duration="19.5" data-track-index="0" src="assets/clip.mp4" playsinline data-has-audio="true"></video>
+    <div id="grade"></div>
+    <div id="dim" class="clip dimL" data-start="5.000" data-duration="0.950" data-track-index="2"></div>
+<div id="ring" class="clip ringGlow" data-start="5.080" data-duration="0.870" data-track-index="3"></div>
+<div id="gN" class="clip giant gNm" data-start="5.080" data-duration="0.870" data-track-index="4">MANISH</div>
+<div id="mbg" class="clip mBg" data-start="7.330" data-duration="0.870" data-track-index="5"><img src="assets/rupee.jpg" alt="" /><div class="tint"></div></div>
+<div id="notes" class="clip notes" data-start="7.330" data-duration="0.870" data-track-index="6"><div id="n0" class="note" style="left:25px"><span>&#8377;</span></div><div id="n1" class="note" style="left:114px"><span>&#8377;</span></div><div id="n2" class="note" style="left:203px"><span>&#8377;</span></div><div id="n3" class="note" style="left:292px"><span>&#8377;</span></div><div id="n4" class="note" style="left:381px"><span>&#8377;</span></div><div id="n5" class="note" style="left:470px"><span>&#8377;</span></div><div id="n6" class="note" style="left:559px"><span>&#8377;</span></div><div id="n7" class="note" style="left:648px"><span>&#8377;</span></div><div id="n8" class="note" style="left:737px"><span>&#8377;</span></div><div id="n9" class="note" style="left:826px"><span>&#8377;</span></div><div id="n10" class="note" style="left:915px"><span>&#8377;</span></div><div id="n11" class="note" style="left:4px"><span>&#8377;</span></div></div>
+<div id="gL" class="clip giant gLk" data-start="7.400" data-duration="0.800" data-track-index="7"><svg class="rs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 8h12M6 13l8.5 8M6 13h3M9 13c6.667 0 6.667-10 0-10"/></svg>10 LAKH</div>
+<div id="p1" class="clip photo mid pa" data-start="7.500" data-duration="0.700" data-track-index="8"><img src="assets/hand.jpg" alt="" /></div>
+<div id="p2" class="clip photo mid pb" data-start="7.620" data-duration="0.580" data-track-index="1"><img src="assets/rupee.jpg" alt="" /></div>
+<div id="gP" class="clip giant gPr" data-start="17.700" data-duration="1.800" data-track-index="2">PRO EDIT</div>
+    <video id="cut0" class="clip cut" data-start="5" data-duration="0.950" data-track-index="30" src="assets/cut0.webm" playsinline muted data-layout-allow-occlusion></video>
+<video id="cut1" class="clip cut" data-start="7.3" data-duration="0.900" data-track-index="31" src="assets/cut1.webm" playsinline muted data-layout-allow-occlusion></video>
+<video id="cut2" class="clip cut" data-start="17.6" data-duration="1.900" data-track-index="32" src="assets/cut2.webm" playsinline muted data-layout-allow-occlusion></video>
+  </div>
+  <div id="s1" class="clip sm one" data-start="0.000" data-duration="1.480" data-track-index="3">AGAR AAP BHI APNE</div>
+<div id="c1" class="clip chip two" data-start="0.960" data-duration="0.660" data-track-index="4">VIDEOS MEIN</div>
+<div id="stack" class="clip stack" data-start="1.600" data-duration="2.450" data-track-index="5"><div id="k1" class="card"><span class="ic">Aa</span>CAPTION</div><div id="k2" class="card"><span class="ic">&#10022;</span>VFX</div><div id="k3" class="card"><span class="ic wave"><i></i><i></i><i></i><i></i><i></i></span>SOUND EFFECT</div></div>
+<div id="sL" class="clip sm one" data-start="3.200" data-duration="0.850" data-track-index="6">LANA CHAHTE HAIN?</div>
+<div id="s3" class="clip sm one" data-start="4.080" data-duration="0.900" data-track-index="7">SO HI GUYS</div>
+<div id="e1" class="clip emoji eW" data-start="4.420" data-duration="0.560" data-track-index="8">&#128075;</div>
+<div id="s4" class="clip sm one" data-start="5.000" data-duration="0.720" data-track-index="1">MY NAME IS</div>
+<div id="c4" class="clip chip two" data-start="5.360" data-duration="0.590" data-track-index="2">MANISH</div>
+<div id="s5" class="clip sm one" data-start="5.880" data-duration="1.420" data-track-index="3">IT'S MY</div>
+<div id="c5" class="clip chip two" data-start="6.200" data-duration="1.100" data-track-index="4">7TH DAY</div>
+<div id="cal" class="clip cal" data-start="6.200" data-duration="1.100" data-track-index="5"><div class="calT">DAY</div><div class="calN">7</div></div>
+<div id="s6" class="clip sm one" data-start="7.360" data-duration="0.840" data-track-index="6">MAKING</div>
+<div id="c6" class="clip chip two" data-start="7.920" data-duration="0.280" data-track-index="7">RUPEES</div>
+<div id="e2" class="clip emoji eM" data-start="7.500" data-duration="0.700" data-track-index="8">&#128176;</div>
+<div id="s7" class="clip sm one" data-start="8.200" data-duration="1.220" data-track-index="1">WITH MY</div>
+<div id="c7" class="clip chip two" data-start="8.600" data-duration="0.820" data-track-index="2">COACHING BUSINESS</div>
+<div id="p3" class="clip photo pc" data-start="8.620" data-duration="0.800" data-track-index="3"><img src="assets/hand.jpg" alt="" /></div>
+<div id="sadb" class="clip sadB" data-start="9.440" data-duration="1.660" data-track-index="4"><img src="assets/blur.jpg" alt="" /></div>
+<div id="g18" class="clip giant g18 top" data-start="9.480" data-duration="1.620" data-track-index="5">18 GHANTE</div>
+<div id="sadp" class="clip sadP" data-start="9.600" data-duration="1.500" data-track-index="6"><img src="assets/sad.png" alt="" /></div>
+<div id="e3" class="clip emoji eS" data-start="10.000" data-duration="1.100" data-track-index="7">&#128553;</div>
+<div id="s8" class="clip sm one" data-start="9.500" data-duration="1.600" data-track-index="8">YE SKILL BANANE MEIN</div>
+<div id="c8" class="clip chip two" data-start="10.300" data-duration="0.800" data-track-index="1">18 GHANTE LAGE</div>
+<div id="s9" class="clip sm one" data-start="11.120" data-duration="1.720" data-track-index="2">BUT AAPKA</div>
+<div id="c9" class="clip chip two" data-start="11.740" data-duration="1.100" data-track-index="3">TIME SAVE</div>
+<div id="clock" class="clip clock" data-start="11.300" data-duration="1.540" data-track-index="4"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="cb"/><circle id="cf" cx="50" cy="50" r="44" class="cf" pathLength="100"/><path id="cm" d="M50 50V16" class="ch"/><path d="M50 50l18 10" class="ch"/></svg></div>
+<div id="cardbg" class="clip cardBg" data-start="12.840" data-duration="3.940" data-track-index="5"></div>
+<div id="ph1" class="clip phone" data-start="12.900" data-duration="1.960" data-track-index="6"><div class="pHead">Comments</div><div class="line" id="l0"><b></b><u style="width:70%"></u></div><div class="line" id="l1"><b></b><u style="width:52%"></u></div><div class="line" id="l2"><b></b><u style="width:62%"></u></div><div class="line" id="l3"><b></b><u style="width:74%"></u></div><div class="line" id="l4"><b></b><u style="width:48%"></u></div><div class="line" id="l5"><b></b><u style="width:66%"></u></div><div class="input"><span id="typed">SKILLS</span><span>&#10148;</span></div></div>
+<div id="ph2" class="clip phone" data-start="14.860" data-duration="1.920" data-track-index="7"><div class="pHead">Messages</div><div id="bA" class="bub">SKILLS</div><div id="bB" class="bub me">Yeh rahe saare links</div><div id="lk1" class="lnk"><i></i>Link 1</div><div id="lk2" class="lnk"><i></i>Link 2</div><div id="lk3" class="lnk"><i></i>Link 3</div></div>
+<div id="s10" class="clip sm one" data-start="12.860" data-duration="2.000" data-track-index="8">MUJHE BAS</div>
+<div id="c10" class="clip chip two" data-start="13.500" data-duration="1.360" data-track-index="1">COMMENT KARO</div>
+<div id="s11" class="clip sm one" data-start="14.880" data-duration="1.900" data-track-index="2">AAPKI DMS MEIN</div>
+<div id="c11" class="clip chip two" data-start="15.760" data-duration="1.020" data-track-index="3">SAARE LINKS</div>
+<div id="s12" class="clip sm one" data-start="16.800" data-duration="2.700" data-track-index="4">PHIR AAP BHI EK</div>
+<div id="c12" class="clip chip two" data-start="17.680" data-duration="1.820" data-track-index="5">PROFESSIONALLY EDIT</div>
+  <div class="pipWrap" id="pw0"><video id="pip0" class="clip pipV" data-start="9.44" data-duration="1.660" data-media-start="9.44" data-track-index="40" src="assets/clip.mp4" playsinline muted style="top:PIPTOP0px"></video></div>
+<div class="pipWrap" id="pw1"><video id="pip1" class="clip pipV" data-start="12.84" data-duration="3.940" data-media-start="12.84" data-track-index="41" src="assets/clip.mp4" playsinline muted style="top:PIPTOP1px"></video></div>
+  <div id="whip0" class="clip whip" data-start="7.200" data-duration="0.270" data-track-index="6"></div>
+<div id="whip1" class="clip whip" data-start="9.310" data-duration="0.270" data-track-index="7"></div>
+<div id="whip2" class="clip whip" data-start="12.710" data-duration="0.270" data-track-index="8"></div>
+<div id="whip3" class="clip whip" data-start="16.650" data-duration="0.270" data-track-index="1"></div>
+  <audio id="sfx0" class="clip" data-start="0.96" data-duration="0.5" data-fade-out="0.15" data-track-index="60" data-volume="0.160" src="assets/sfx/pop/fs-258269-mouth-pop.ogg"></audio>
+<audio id="sfx1" class="clip" data-start="1.68" data-duration="0.5" data-fade-out="0.15" data-track-index="61" data-volume="0.160" src="assets/sfx/click/fs788933.ogg"></audio>
+<audio id="sfx2" class="clip" data-start="2.22" data-duration="0.5" data-fade-out="0.15" data-track-index="62" data-volume="0.160" src="assets/sfx/click/kenney-interface-select-001.ogg"></audio>
+<audio id="sfx3" class="clip" data-start="2.8" data-duration="0.5" data-fade-out="0.15" data-track-index="63" data-volume="0.160" src="assets/sfx/click/kenney-interface-select-003.ogg"></audio>
+<audio id="sfx4" class="clip" data-start="4.44" data-duration="0.5" data-fade-out="0.15" data-track-index="64" data-volume="0.128" src="assets/sfx/pop/fs-447910-plop.ogg"></audio>
+<audio id="sfx5" class="clip" data-start="5.08" data-duration="0.9" data-fade-out="0.15" data-track-index="65" data-volume="0.160" src="assets/sfx/impact/kenney-impact-impactpunch-heavy-000.ogg"></audio>
+<audio id="sfx6" class="clip" data-start="5.36" data-duration="0.5" data-fade-out="0.15" data-track-index="66" data-volume="0.128" src="assets/sfx/pop/fs-824189-pop-in-sfx.ogg"></audio>
+<audio id="sfx7" class="clip" data-start="6.2" data-duration="0.5" data-fade-out="0.15" data-track-index="67" data-volume="0.128" src="assets/sfx/ding/kenney-interface-confirmation-001.ogg"></audio>
+<audio id="sfx8" class="clip" data-start="7.26" data-duration="0.5" data-fade-out="0.15" data-track-index="68" data-volume="0.160" src="assets/sfx/whoosh/fs-683101-quick-woosh.ogg"></audio>
+<audio id="sfx9" class="clip" data-start="7.4" data-duration="0.9" data-fade-out="0.15" data-track-index="69" data-volume="0.320" src="assets/sfx/impact/fs-177242-cinematic-impact.ogg"></audio>
+<audio id="sfx10" class="clip" data-start="7.72" data-duration="0.5" data-fade-out="0.15" data-track-index="70" data-volume="0.192" src="assets/sfx/ding/kenney-interface-glass-001.ogg"></audio>
+<audio id="sfx11" class="clip" data-start="7.94" data-duration="0.5" data-fade-out="0.15" data-track-index="71" data-volume="0.192" src="assets/sfx/ding/kenney-interface-glass-002.ogg"></audio>
+<audio id="sfx12" class="clip" data-start="8.62" data-duration="0.5" data-fade-out="0.15" data-track-index="72" data-volume="0.128" src="assets/sfx/pop/fs527522.ogg"></audio>
+<audio id="sfx13" class="clip" data-start="9.37" data-duration="0.5" data-fade-out="0.15" data-track-index="73" data-volume="0.160" src="assets/sfx/whoosh/fs810485.ogg"></audio>
+<audio id="sfx14" class="clip" data-start="10.3" data-duration="0.9" data-fade-out="0.15" data-track-index="74" data-volume="0.192" src="assets/sfx/impact/kenney-impact-impactsoft-heavy-001.ogg"></audio>
+<audio id="sfx15" class="clip" data-start="11.76" data-duration="0.5" data-fade-out="0.15" data-track-index="75" data-volume="0.160" src="assets/sfx/tick/fs528561.ogg"></audio>
+<audio id="sfx16" class="clip" data-start="12.12" data-duration="0.5" data-fade-out="0.15" data-track-index="76" data-volume="0.144" src="assets/sfx/ding/kenney-interface-confirmation-002.ogg"></audio>
+<audio id="sfx17" class="clip" data-start="12.77" data-duration="0.5" data-fade-out="0.15" data-track-index="77" data-volume="0.160" src="assets/sfx/whoosh/fs830856.ogg"></audio>
+<audio id="sfx18" class="clip" data-start="14.14" data-duration="0.6" data-fade-out="0.15" data-track-index="78" data-volume="0.112" src="assets/sfx/typing/fs-416777-digital-typing-wav.ogg"></audio>
+<audio id="sfx19" class="clip" data-start="14.86" data-duration="0.5" data-fade-out="0.15" data-track-index="79" data-volume="0.128" src="assets/sfx/transition/fs-786514-swoosh-v2.ogg"></audio>
+<audio id="sfx20" class="clip" data-start="15.3" data-duration="0.5" data-fade-out="0.15" data-track-index="80" data-volume="0.144" src="assets/sfx/ding/kenney-interface-confirmation-003.ogg"></audio>
+<audio id="sfx21" class="clip" data-start="15.78" data-duration="0.5" data-fade-out="0.15" data-track-index="81" data-volume="0.144" src="assets/sfx/click/kenney-interface-click-001.ogg"></audio>
+<audio id="sfx22" class="clip" data-start="16.04" data-duration="0.5" data-fade-out="0.15" data-track-index="82" data-volume="0.144" src="assets/sfx/click/kenney-interface-select-002.ogg"></audio>
+<audio id="sfx23" class="clip" data-start="16.26" data-duration="0.5" data-fade-out="0.15" data-track-index="83" data-volume="0.144" src="assets/sfx/tick/fs384187.ogg"></audio>
+<audio id="sfx24" class="clip" data-start="16.71" data-duration="0.5" data-fade-out="0.15" data-track-index="84" data-volume="0.160" src="assets/sfx/whoosh/fs393811.ogg"></audio>
+<audio id="sfx25" class="clip" data-start="17.7" data-duration="0.9" data-fade-out="0.15" data-track-index="85" data-volume="0.224" src="assets/sfx/impact/kenney-impact-impactsoft-heavy-000.ogg"></audio>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+
+const ease4="power4.out";
+const chip=(s,t)=>tl.fromTo(s,{xPercent:-50,scale:1.5,opacity:0},{xPercent:-50,scale:1,opacity:1,duration:.2,ease:ease4},t);
+const sm=(s,t)=>tl.fromTo(s,{y:30,opacity:0},{y:0,opacity:1,duration:.2,ease:"power3.out"},t);
+const pop=(s,t,r=0)=>tl.fromTo(s,{scale:.2,rotation:r-18,opacity:0},{scale:1,rotation:r,opacity:1,duration:.26,ease:"back.out(1.6)"},t);
+const slam=(s,t)=>tl.fromTo(s,{scale:1.6,opacity:0},{scale:1,opacity:1,duration:.2,ease:ease4},t);
+const shake=(t,a)=>{tl.to("#cam",{x:a,y:a*.8,duration:.04,ease:"none"},t+.1);tl.to("#cam",{x:0,y:0,duration:.16,ease:"power2.out"},t+.14);};
+
+// camera: a slow push, reset on each new idea
+[[0,1.6,1,1.05],[1.6,4.08,1,1.04],[4.08,5.0,1.02,1.06],[5.0,5.95,1,1.05],[5.95,7.33,1.02,1.07],[7.33,8.2,1,1.04],[8.2,9.44,1.02,1.08],[11.1,12.84,1,1.07],[16.78,19.5,1,1.09]].forEach(([a,b,s0,s1])=>{tl.set("#cam",{scale:s0},a);tl.to("#cam",{scale:s1,duration:b-a,ease:"none"},a);});
+
+sm("#s1",0);chip("#c1",.96);
+tl.fromTo("#stack",{y:300,opacity:0},{y:0,opacity:1,duration:.3,ease:ease4},1.6);
+[["#k1",1.68],["#k2",2.22],["#k3",2.8]].forEach(([s,t])=>{tl.to(s,{backgroundColor:"#7E1434",borderColor:"#F7EEDD",scale:1.05,duration:.14,ease:"power3.out"},t);tl.to(s,{scale:1,duration:.14,ease:"power2.out"},t+.14);});
+sm("#sL",3.2);
+sm("#s3",4.08);pop("#e1",4.42,-6);tl.to("#e1",{rotation:12,duration:.18,yoyo:true,repeat:1,ease:"sine.inOut"},4.68);
+tl.fromTo("#dim",{opacity:0},{opacity:1,duration:.2,ease:"power2.out"},5.0);
+tl.fromTo("#ring",{scale:.6,opacity:0},{scale:1,opacity:1,duration:.3,ease:"back.out(1.5)"},5.08);
+slam("#gN",5.08);shake(5.08,8);sm("#s4",5.0);chip("#c4",5.36);
+sm("#s5",5.88);chip("#c5",6.2);pop("#cal",6.2,-3);
+tl.fromTo("#mbg",{opacity:0},{opacity:1,duration:.1,ease:"none"},7.33);
+for(let i=0;i<12;i++){tl.fromTo("#n"+i,{y:0,rotation:(i%2?-1:1)*20},{y:2150,rotation:(i%2?1:-1)*90,duration:.95,ease:"none"},7.33+((i*37)%10)*.025);}
+slam("#gL",7.4);shake(7.4,12);pop("#p1",7.5,-7);pop("#p2",7.62,6);pop("#e2",7.5,-6);sm("#s6",7.36);chip("#c6",7.92);
+sm("#s7",8.2);chip("#c7",8.6);tl.fromTo("#p3",{x:520,rotation:10},{x:0,rotation:3,duration:.3,ease:ease4},8.62);
+tl.fromTo("#sadp",{x:-200,opacity:0},{x:0,opacity:1,duration:.3,ease:ease4},9.6);
+tl.fromTo("#sadp",{scale:1},{scale:1.05,duration:1.4,ease:"none"},9.7);
+slam("#g18",9.48);pop("#e3",10.0,-6);sm("#s8",9.5);chip("#c8",10.3);
+tl.fromTo("#pw0",{scale:0},{scale:1,duration:.26,ease:"back.out(1.5)"},9.6);tl.set("#pw0",{scale:0},11.1);
+sm("#s9",11.12);chip("#c9",11.74);pop("#clock",11.3);
+tl.fromTo("#cf",{strokeDashoffset:0},{strokeDashoffset:100,duration:1.3,ease:"power2.inOut"},11.4);
+tl.fromTo("#cm",{rotation:0},{rotation:-720,duration:1.3,ease:"power2.inOut"},11.4);
+tl.fromTo("#ph1",{y:1100},{y:0,duration:.36,ease:ease4},12.9);
+for(let i=0;i<6;i++){tl.fromTo("#l"+i,{x:-50,opacity:0},{x:0,opacity:1,duration:.22,ease:"power3.out"},13.05+i*.1);}
+tl.fromTo("#typed",{width:0},{width:190,duration:.34,ease:"steps(6)"},14.14);
+sm("#s10",12.86);chip("#c10",13.5);
+tl.fromTo("#pw1",{scale:0},{scale:1,duration:.26,ease:"back.out(1.5)"},12.96);
+tl.fromTo("#ph2",{x:700},{x:0,duration:.28,ease:ease4},14.86);
+pop("#bA",15.0);pop("#bB",15.3);
+[["#lk1",15.78],["#lk2",16.04],["#lk3",16.26]].forEach(([s,t])=>tl.fromTo(s,{x:-60,opacity:0},{x:0,opacity:1,duration:.22,ease:"back.out(1.4)"},t));
+sm("#s11",14.88);chip("#c11",15.76);
+tl.set("#pw1",{scale:0},16.78);
+sm("#s12",16.8);slam("#gP",17.7);shake(17.7,10);chip("#c12",17.68);
+tl.fromTo("#whip0",{x:1300},{x:-1300,duration:.27,ease:"none"},7.200);
+tl.fromTo("#whip1",{x:1300},{x:-1300,duration:.27,ease:"none"},9.310);
+tl.fromTo("#whip2",{x:1300},{x:-1300,duration:.27,ease:"none"},12.710);
+tl.fromTo("#whip3",{x:1300},{x:-1300,duration:.27,ease:"none"},16.650);
+
+window.__timelines["main"]=tl;tl.seek(0);
+</script></body></html>

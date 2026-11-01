@@ -1,0 +1,94 @@
+{
+ "takes": [
+  {
+   "from": 0,
+   "to": 4.233,
+   "cx": 0.63,
+   "gains": [
+    0.987,
+    0.951,
+    0.943
+   ]
+  },
+  {
+   "from": 4.233,
+   "to": 9.5,
+   "cx": 0.68,
+   "gains": [
+    1.027,
+    1.006,
+    1.02
+   ]
+  },
+  {
+   "from": 9.5,
+   "to": 15.033,
+   "cx": 0.47,
+   "gains": [
+    1.0625,
+    1.068,
+    1.119
+   ]
+  },
+  {
+   "from": 15.033,
+   "to": 19.6,
+   "cx": 0.58,
+   "gains": [
+    0.89,
+    0.862,
+    0.872
+   ]
+  }
+ ],
+ "beats": [
+  {
+   "t": 1,
+   "name": "Hook"
+  },
+  {
+   "t": 2.5,
+   "name": "Caption, VFX, sound effect"
+  },
+  {
+   "t": 4.6,
+   "name": "Greeting and emoji"
+  },
+  {
+   "t": 5.45,
+   "name": "Name behind him, face highlighted"
+  },
+  {
+   "t": 6.5,
+   "name": "Seventh day"
+  },
+  {
+   "t": 7.75,
+   "name": "10 lakh with money images"
+  },
+  {
+   "t": 8.75,
+   "name": "Coaching business"
+  },
+  {
+   "t": 10.5,
+   "name": "18 hours, sad person"
+  },
+  {
+   "t": 12.2,
+   "name": "I save your time"
+  },
+  {
+   "t": 13.7,
+   "name": "Comment SKILLS"
+  },
+  {
+   "t": 15.9,
+   "name": "Links in your DMs"
+  },
+  {
+   "t": 18,
+   "name": "Edit professionally"
+  }
+ ]
+}

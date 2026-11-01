@@ -1,0 +1,105 @@
+name: Render stills storyboard
+
+# Stills only: color, layout, images and text. No motion and no sound. Files are kept 1 day: this repo is public.
+on:
+  workflow_dispatch:
+    inputs:
+      drive_file_id:
+        description: "Google Drive file ID of the raw video"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  stills:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HYPERFRAMES_NO_TELEMETRY: "1"
+      DO_NOT_TRACK: "1"
+      FILE_ID: ${{ github.event.inputs.drive_file_id }}
+      P: templates/premium-storyboard
+      PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+      RCLONE_CONFIG_GD_TYPE: drive
+      RCLONE_CONFIG_GD_SCOPE: drive
+      GD_CID: ${{ secrets.GDRIVE_CLIENT_ID }}
+      GD_CSEC: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+      GD_RT: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg rclone fonts-noto-color-emoji
+
+      - name: Download the video
+        run: |
+          export RCLONE_CONFIG_GD_CLIENT_ID=$(printf '%s' "$GD_CID" | tr -d '[:space:]"')
+          export RCLONE_CONFIG_GD_CLIENT_SECRET=$(printf '%s' "$GD_CSEC" | tr -d '[:space:]"')
+          RT=$(printf '%s' "$GD_RT" | tr -d '[:space:]"{}')
+          export RCLONE_CONFIG_GD_TOKEN="{\"access_token\":\"\",\"token_type\":\"Bearer\",\"refresh_token\":\"$RT\",\"expiry\":\"2000-01-01T00:00:00Z\"}"
+          mkdir -p work "$P/assets/fonts" out/stills out/color
+          rclone backend copyid GD: "$FILE_ID" work/raw.mp4 --drive-acknowledge-abuse
+
+      - name: Download stock images
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.parse, urllib.request
+          key = os.environ["PIXABAY_API_KEY"].strip()
+          want = {"rupee": 4398432, "hand": 2459328, "sad": 10202054}
+          for name, i in want.items():
+              u = "https://pixabay.com/api/?" + urllib.parse.urlencode({"key": key, "id": i})
+              d = json.load(urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "kakashi-minja"}), timeout=30))
+              x = d["hits"][0]
+              req = urllib.request.Request(x["largeImageURL"], headers={"User-Agent": "kakashi-minja"})
+              open(f"work/{name}.jpg", "wb").write(urllib.request.urlopen(req, timeout=60).read())
+              print(name, i, x["imageWidth"], x["imageHeight"], x["pageURL"])
+          PY
+          cp work/rupee.jpg work/hand.jpg "$P/assets/"
+          cp templates/look-tests/fonts/anton-latin-400-normal.woff2 templates/look-tests/fonts/sora-latin-800-normal.woff2 "$P/assets/fonts/"
+
+      - name: Color match each take and grab the frames
+        run: |
+          node -e '
+            const p=require(process.env.P.replace(/^/,"./")+"/plan.json");
+            const lines=p.beats.map((b,i)=>{const k=p.takes.find(t=>b.t>=t.from&&b.t<t.to);const x=Math.round(Math.min(1920-608,Math.max(0,k.cx*1920-304)));
+              const [r,g,bl]=k.gains;return [i,b.t,x,r,g,bl].join(" ")});
+            console.log(lines.join("\n"));
+          ' > work/beats.txt
+          while read i t x r g b; do
+            ffmpeg -nostdin -loglevel error -y -ss "$t" -i work/raw.mp4 -frames:v 1 -vf "crop=608:1080:$x:0,scale=1080:1920:flags=lanczos,colorchannelmixer=rr=$r:gg=$g:bb=$b,eq=contrast=1.08:saturation=1.04:gamma=0.98,selectivecolor=cyans=0.14 0 0 0" -q:v 2 "$P/assets/f$i.jpg"
+            ffmpeg -nostdin -loglevel error -y -ss "$t" -i work/raw.mp4 -frames:v 1 -vf "crop=608:1080:$x:0,scale=540:-2" -q:v 3 "out/color/before_$i.jpg"
+            ffmpeg -nostdin -loglevel error -y -i "$P/assets/f$i.jpg" -vf "scale=540:-2" -q:v 3 "out/color/after_$i.jpg"
+          done < work/beats.txt
+
+      - name: Cut the speaker out of each still
+        run: |
+          S=$(date +%s)
+          while read i t x r g b; do
+            npx -y hyperframes@0.8.226 remove-background "$P/assets/f$i.jpg" -o "$P/assets/c$i.png" --device cpu < /dev/null
+          done < work/beats.txt
+          npx -y hyperframes@0.8.226 remove-background work/sad.jpg -o "$P/assets/sad.png" --device cpu
+          echo "Cutout seconds: $(( $(date +%s) - S ))"
+
+      - name: Render the stills
+        run: |
+          S=$(date +%s)
+          npx -y hyperframes@0.8.226 check "$P" --json > out/check.json || true
+          AT=$(node -e 'const p=require(process.env.P.replace(/^/,"./")+"/plan.json");console.log(p.beats.map((_,i)=>(i+0.5).toFixed(1)).join(","))')
+          npx -y hyperframes@0.8.226 snapshot "$P" --at "$AT"
+          cp "$P"/.hyperframes/artifacts/snapshots/*.png out/stills/ || find "$P" -name '*.png' -path '*snapshot*' -exec cp {} out/stills/ \;
+          ls out/stills | head -20
+          echo "Stills seconds: $(( $(date +%s) - S ))"
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: premium-storyboard
+          path: out
+          retention-days: 1

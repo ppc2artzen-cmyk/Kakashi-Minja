@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Anton";src:url("assets/fonts/anton-latin-400-normal.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Sora";src:url("assets/fonts/sora-latin-800-normal.woff2") format("woff2");font-weight:800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden}
+.beat{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden}
+.base,.cut,.bgi{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+.base{z-index:1}.bgi{z-index:2}.tint{position:absolute;inset:0;z-index:3;background:linear-gradient(180deg,rgba(60,6,24,.55),rgba(60,6,24,.25) 50%,rgba(20,2,8,.75))}
+.dim{position:absolute;inset:0;z-index:4;background:rgba(34,4,14,.74)}
+.cut{z-index:30}
+.grade{position:absolute;inset:0;z-index:35;background:radial-gradient(ellipse at 50% 38%,transparent 52%,rgba(16,4,8,.5) 100%),linear-gradient(180deg,transparent 62%,rgba(16,4,8,.72) 100%)}
+.ringGlow{position:absolute;z-index:6;left:190px;top:320px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(247,238,221,.34) 0%,rgba(247,238,221,.1) 55%,transparent 72%);border:6px solid rgba(247,238,221,.5)}
+.giant{position:absolute;z-index:10;left:0;right:0;text-align:center;font-family:"Anton",sans-serif;font-weight:400;line-height:1;white-space:nowrap;letter-spacing:.005em;display:flex;justify-content:center;align-items:center;gap:8px}
+.rs{height:.72em;width:.72em;flex:none}
+.rail{position:absolute;z-index:45;left:50px;right:50px;top:1340px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.sm{font:800 48px/1.1 "Sora",sans-serif;color:#fff;letter-spacing:.02em;text-shadow:0 3px 14px rgba(0,0,0,.7)}
+.chip{font:400 112px/1.18 "Anton",sans-serif;color:#fff;background:#7E1434;padding:6px 38px 10px;border-radius:14px;letter-spacing:.015em;white-space:nowrap;box-shadow:0 18px 40px rgba(40,4,16,.45);border:3px solid rgba(247,238,221,.28)}
+.emoji{position:absolute;z-index:46;font-size:190px;line-height:1;font-family:"Noto Color Emoji",sans-serif}
+.tag{position:absolute;z-index:46;font:400 86px/1.2 "Anton",sans-serif;color:#7E1434;background:#F7EEDD;padding:4px 36px;border-radius:12px;letter-spacing:.03em}
+.stack{position:absolute;z-index:46;left:150px;right:150px;top:1010px;display:grid;gap:22px}
+.card{display:flex;align-items:center;gap:30px;font:800 54px/1 "Sora",sans-serif;color:#fff;padding:24px 30px;border-radius:24px;background:rgba(30,6,14,.62);border:2px solid rgba(247,238,221,.4);letter-spacing:-.01em}
+.card.on{background:#7E1434;border-color:#F7EEDD}
+.ic{display:flex;align-items:center;justify-content:center;width:82px;height:82px;border-radius:18px;background:#F7EEDD;color:#7E1434;font:800 42px/1 "Sora",sans-serif;flex:none;gap:5px}
+.wave i{display:block;width:7px;background:#7E1434;border-radius:4px}.wave i:nth-child(1){height:22px}.wave i:nth-child(2){height:48px}.wave i:nth-child(3){height:34px}.wave i:nth-child(4){height:56px}.wave i:nth-child(5){height:26px}
+.cal{position:absolute;z-index:46;left:70px;top:150px;width:300px;border-radius:30px;overflow:hidden;background:#F7EEDD;box-shadow:0 24px 50px rgba(0,0,0,.4);text-align:center}
+.calT{background:#7E1434;color:#fff;font:800 44px/1 "Sora",sans-serif;padding:20px;letter-spacing:.14em}
+.calN{font:400 210px/1.12 "Anton",sans-serif;color:#7E1434}
+.photo{position:absolute;z-index:46;width:380px;height:470px;border-radius:28px;overflow:hidden;border:6px solid #F7EEDD;box-shadow:0 26px 60px rgba(0,0,0,.45)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.sad{position:absolute;z-index:44;left:-30px;top:640px;width:640px;height:800px;object-fit:contain;object-position:left bottom;filter:saturate(.45) brightness(.95)}
+.clock{position:absolute;z-index:46;left:40px;top:760px;width:380px;height:380px;background:rgba(30,6,14,.7);border-radius:50%}
+.clock svg{width:100%;height:100%}.cb,.cf,.ch{fill:none;stroke-linecap:round}.cb{stroke:rgba(247,238,221,.3);stroke-width:7}.cf{stroke:#F7EEDD;stroke-width:7;stroke-dasharray:72 100;transform:rotate(-90deg);transform-origin:50% 50%}.ch{stroke:#fff;stroke-width:5}
+.phone{position:absolute;z-index:46;left:90px;top:330px;width:440px;height:880px;border-radius:64px;background:#fff;border:14px solid #120c0e;padding:66px 26px 26px;box-shadow:0 34px 70px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:20px;color:#111}
+.pHead{font:800 38px/1 "Sora",sans-serif;margin-bottom:10px}
+.line{display:flex;align-items:center;gap:16px}.line b{width:62px;height:62px;border-radius:50%;background:#dcdcdc;flex:none}.line u{display:block;height:20px;border-radius:10px;background:#e4e4e4;text-decoration:none}
+.input{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font:800 42px/1 "Sora",sans-serif;background:#F7EEDD;color:#7E1434;border:4px solid #7E1434;padding:24px 26px;border-radius:999px}
+.send{color:#7E1434}
+.bub{align-self:flex-end;background:#e9e9ea;font:800 30px/1.2 "Sora",sans-serif;padding:18px 24px;border-radius:26px}
+.bub.me{align-self:flex-start;background:#7E1434;color:#fff}
+.lnk{display:flex;align-items:center;gap:16px;font:800 28px/1 "Sora",sans-serif;background:#F7EEDD;color:#7E1434;padding:22px;border-radius:20px}.lnk i{width:30px;height:30px;border-radius:50%;background:#7E1434;display:block}
+.stars{position:absolute;z-index:46;left:0;right:0;top:1250px;text-align:center;font:800 52px/1 "Sora",sans-serif;color:#F7EEDD}
+</style></head><body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="12" data-width="1080" data-height="1920">
+<div id="beat0" class="clip beat" data-start="0" data-duration="1" data-track-index="0">
+  <img class="base" src="assets/f0.jpg" alt="" />
+  
+  
+  
+  
+  <img class="cut" src="assets/c0.png" alt="" />
+  <div class="grade"></div>
+  <div class="rail"><div class="sm">AGAR AAP BHI APNE</div><div class="chip">VIDEOS MEIN</div></div>
+</div>
+
+<div id="beat1" class="clip beat" data-start="1" data-duration="1" data-track-index="1">
+  <img class="base" src="assets/f1.jpg" alt="" />
+  
+  
+  
+  
+  <img class="cut" src="assets/c1.png" alt="" />
+  <div class="grade"></div>
+  <div class="stack"><div class="card on" style=""><span class="ic">Aa</span>CAPTION</div><div class="card" style=""><span class="ic">&#10022;</span>VFX</div><div class="card" style=""><span class="ic wave"><i></i><i></i><i></i><i></i><i></i></span>SOUND EFFECT</div></div><div class="rail"><div class="sm">AISE</div></div>
+</div>
+
+<div id="beat2" class="clip beat" data-start="2" data-duration="1" data-track-index="0">
+  <img class="base" src="assets/f2.jpg" alt="" />
+  
+  
+  
+  
+  <img class="cut" src="assets/c2.png" alt="" />
+  <div class="grade"></div>
+  <div class="emoji" style="left:90px;top:640px">&#128075;</div><div class="rail"><div class="sm">SO HI GUYS</div></div>
+</div>
+
+<div id="beat3" class="clip beat" data-start="3" data-duration="1" data-track-index="1">
+  <img class="base" src="assets/f3.jpg" alt="" />
+  
+  <div class="dim"></div>
+  <div class="ringGlow"></div>
+  <div class="giant" style="top:210px;font-size:372px;color:#F7EEDD">MANISH</div>
+  <img class="cut" src="assets/c3.png" alt="" />
+  <div class="grade"></div>
+  <div class="tag" style="top:1190px;left:330px">MANISH</div><div class="rail"><div class="sm">MY NAME IS</div></div>
+</div>
+
+<div id="beat4" class="clip beat" data-start="4" data-duration="1" data-track-index="0">
+  <img class="base" src="assets/f4.jpg" alt="" />
+  
+  
+  
+  
+  <img class="cut" src="assets/c4.png" alt="" />
+  <div class="grade"></div>
+  <div class="cal"><div class="calT">DAY</div><div class="calN">7</div></div><div class="rail"><div class="sm">IT'S MY</div><div class="chip">7TH DAY</div></div>
+</div>
+
+<div id="beat5" class="clip beat" data-start="5" data-duration="1" data-track-index="1">
+  <img class="base" src="assets/f5.jpg" alt="" />
+  <img class="bgi" src="assets/rupee.jpg" alt="" /><div class="tint"></div>
+  
+  
+  <div class="giant" style="top:210px;font-size:300px;color:#F7EEDD"><svg class="rs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 8h12M6 13l8.5 8M6 13h3M9 13c6.667 0 6.667-10 0-10"/></svg>10 LAKH</div>
+  <img class="cut" src="assets/c5.png" alt="" />
+  <div class="grade"></div>
+  <div class="emoji" style="left:800px;top:930px">&#128176;</div><div class="rail"><div class="sm">MAKING</div><div class="chip">RUPEES</div></div>
+</div>
+
+<div id="beat6" class="clip beat" data-start="6" data-duration="1" data-track-index="0">
+  <img class="base" src="assets/f6.jpg" alt="" />
+  
+  
+  
+  
+  <img class="cut" src="assets/c6.png" alt="" />
+  <div class="grade"></div>
+  <div class="photo" style="left:640px;top:210px"><img src="assets/hand.jpg" alt="" /></div><div class="rail"><div class="sm">WITH MY</div><div class="chip">COACHING BUSINESS</div></div>
+</div>
+
+<div id="beat7" class="clip beat" data-start="7" data-duration="1" data-track-index="1">
+  <img class="base" src="assets/f7.jpg" alt="" />
+  
+  
+  
+  <div class="giant" style="top:90px;font-size:330px;color:#7E1434">18 GHANTE</div>
+  <img class="cut" src="assets/c7.png" alt="" />
+  <div class="grade"></div>
+  <img class="sad" src="assets/sad.png" alt="" /><div class="emoji" style="left:60px;top:780px;font-size:150px">&#128553;</div><div class="rail"><div class="sm">YE SKILL BANANE MEIN</div><div class="chip">18 GHANTE LAGE</div></div>
+</div>
+
+<div id="beat8" class="clip beat" data-start="8" data-duration="1" data-track-index="0">
+  <img class="base" src="assets/f8.jpg" alt="" />
+  
+  
+  
+  
+  <img class="cut" src="assets/c8.png" alt="" />
+  <div class="grade"></div>
+  <div class="clock"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="cb"/><circle cx="50" cy="50" r="44" class="cf" pathLength="100"/><path d="M50 50V18M50 50l20 12" class="ch"/></svg></div><div class="rail"><div class="sm">BUT AAPKA</div><div class="chip">TIME SAVE</div></div>
+</div>
+
+<div id="beat9" class="clip beat" data-start="9" data-duration="1" data-track-index="1">
+  <img class="base" src="assets/f9.jpg" alt="" />
+  
+  
+  
+  
+  <img class="cut" src="assets/c9.png" alt="" />
+  <div class="grade"></div>
+  <div class="phone"><div class="pHead">Comments</div><div class="line"><b></b><u style="width:70%"></u></div><div class="line"><b></b><u style="width:52%"></u></div><div class="line"><b></b><u style="width:62%"></u></div><div class="input">SKILLS<span class="send">&#10148;</span></div></div><div class="rail"><div class="sm">MUJHE BAS</div><div class="chip">COMMENT KARO</div></div>
+</div>
+
+<div id="beat10" class="clip beat" data-start="10" data-duration="1" data-track-index="0">
+  <img class="base" src="assets/f10.jpg" alt="" />
+  
+  
+  
+  
+  <img class="cut" src="assets/c10.png" alt="" />
+  <div class="grade"></div>
+  <div class="phone"><div class="pHead">Messages</div><div class="bub">SKILLS</div><div class="bub me">Yeh rahe saare links</div><div class="lnk"><i></i>Link 1</div><div class="lnk"><i></i>Link 2</div><div class="lnk"><i></i>Link 3</div></div><div class="rail"><div class="sm">AAPKI DMS MEIN</div><div class="chip">SAARE LINKS</div></div>
+</div>
+
+<div id="beat11" class="clip beat" data-start="11" data-duration="1" data-track-index="1">
+  <img class="base" src="assets/f11.jpg" alt="" />
+  
+  
+  
+  <div class="giant" style="top:150px;font-size:560px;color:#7E1434">PRO</div>
+  <img class="cut" src="assets/c11.png" alt="" />
+  <div class="grade"></div>
+  <div class="stars">&#9733; &#9733; &#9733; &#9733; &#9733;</div><div class="rail"><div class="sm">PHIR AAP BHI EK</div><div class="chip">PROFESSIONALLY EDIT</div></div>
+</div></div>
+<script>window.__timelines=window.__timelines||{};const tl=gsap.timeline({paused:true});window.__timelines["main"]=tl;</script>
+</body></html>

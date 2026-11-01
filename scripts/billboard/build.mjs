@@ -81,7 +81,12 @@ const sfx = [
   [B.b8[0] - 0.07, "whoosh/fs393811.ogg", 0.5], [m(30.97), "pop/fs-824189-pop-in-sfx.ogg", 0.5], [SPEECH, "impact/kenney-impact-impactsoft-heavy-000.ogg", 0.55],
 ];
 if (new Set(sfx.map((s) => s[1])).size !== sfx.length) throw new Error("repeated sound");
-const audio = sfx.map(([t, f, v], i) => `<audio id="sfx${i}" class="clip" data-start="${Math.max(0, t).toFixed(3)}" data-track-index="${20 + i}" data-volume="${v}" src="assets/sfx/${f}"></audio>`).join("\n");
+// Effects stay short and well under the voice, so she is never drowned out. Big impacts ring a little longer.
+const LEVEL = 0.32;
+const audio = sfx.map(([t, f, v], i) => {
+  const len = f.startsWith("impact/") ? 0.9 : f.startsWith("typing/") ? 0.7 : 0.5;
+  return `<audio id="sfx${i}" class="clip" data-start="${Math.max(0, t).toFixed(3)}" data-duration="${len}" data-fade-out="0.15" data-track-index="${20 + i}" data-volume="${(v * LEVEL).toFixed(3)}" src="assets/sfx/${f}"></audio>`;
+}).join("\n");
 
 const css = `
 @font-face{font-family:"Anton";src:url("assets/fonts/anton-latin-400-normal.woff2") format("woff2");font-weight:400}
@@ -102,7 +107,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
 .topRail{top:930px}
 .bar{left:-30px;width:1140px;top:1170px;height:260px;background:#FFD60A;transform-origin:0 50%}
 .barText{left:0;right:0;top:1180px;text-align:center;color:#000;font-size:190px;line-height:1.22;letter-spacing:.01em}
-.big2{font-size:214px;line-height:1.12}.big3{font-size:158px;line-height:1.5;white-space:nowrap}
+.big2{font-size:214px;line-height:1.12}.big3{font-size:146px;line-height:1.62;white-space:nowrap}
 .chip{left:70px;display:flex;align-items:center;gap:26px;background:#FFD60A;color:#000;font-size:100px;line-height:1.16;padding:14px 40px 14px 18px;letter-spacing:.01em;white-space:nowrap}
 .chip b{display:flex;align-items:center;justify-content:center;width:104px;height:104px;background:#000;color:#FFD60A;flex:none}
 #c1{top:1040px}#c2{top:1200px}#c3{top:1360px}
@@ -209,6 +214,7 @@ window.__timelines["main"]=tl;tl.seek(0);
 
 mkdirSync(dir, { recursive: true });
 writeFileSync(join(dir, "index.html"), html);
+writeFileSync(join(dir, "edit-cuts.json"), JSON.stringify({ keep: KEEP, hold: HOLD }));
 writeFileSync(join(dir, "edit.json"), JSON.stringify({ keep: KEEP, hold: HOLD, duration: DUR, beats: B, sfx: sfx.map(([t, f]) => ({ t, f })) }, null, 1));
 console.log(`duration ${DUR}s, ${sfx.length} different sounds, no music`);
 console.log(Object.entries(B).map(([k, v]) => `${k} ${v[0].toFixed(2)}-${v[1].toFixed(2)}`).join(" | "));

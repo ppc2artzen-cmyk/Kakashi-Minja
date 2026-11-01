@@ -84,7 +84,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: work/cutout.webm
-          key: cutout-${{ env.HASH }}
+          key: cutout-${{ github.event.inputs.drive_file_id }}-${{ hashFiles('templates/billboard-project1/edit-cuts.json') }}
 
       - name: Cut the speaker out of the background
         if: steps.cut.outputs.cache-hit != 'true'

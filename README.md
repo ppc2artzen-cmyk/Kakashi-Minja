@@ -17,6 +17,8 @@ AI video editing rendered in GitHub Actions: Remotion draws the edit, Whisper ma
 
 - `src/compositions/proedit/`: the Pro Edit template and its timeline
 - `.claude/skills/`: `pro-edit-0-1` (whaleyxbt/claude-motion, MIT) and `pro-edit` (Barty-Bart/motion-graphics, MIT)
+- `.claude/skills/hyperframes*`, `media-use`: HyperFrames skills (heygen-com/hyperframes, Apache-2.0)
+- `scripts/install-remotion-skills.sh`: installs the official Remotion skills on demand
 - `scripts/storyboard/`: builds the storyboard and timeline
 
 Never commit API keys or client videos to this repo. It is public.

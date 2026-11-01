@@ -1,0 +1,50 @@
+name: HyperFrames test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HYPERFRAMES_NO_TELEMETRY: "1"
+      DO_NOT_TRACK: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Show machine
+        run: |
+          echo "CPUs: $(nproc)"
+          free -h
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Check the project
+        run: npx -y hyperframes@0.8.226 check templates/hyperframes-test --json
+
+      - name: Render
+        run: |
+          mkdir -p out
+          npx -y hyperframes@0.8.226 render templates/hyperframes-test -o out/hyperframes-test.mp4 --quality draft
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate:format=duration,size -of default=nw=1 out/hyperframes-test.mp4
+
+      - name: Grab check frame
+        run: ffmpeg -nostdin -loglevel error -y -ss 2.5 -i out/hyperframes-test.mp4 -frames:v 1 -vf scale=360:-2 out/check.jpg
+
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: hyperframes-test
+          path: out
+          retention-days: 3

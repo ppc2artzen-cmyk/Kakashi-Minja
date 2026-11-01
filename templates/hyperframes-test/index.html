@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root { --ground: #120a0d; --ink: #ffffff; --key: #8e1b3d; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 100%; height: 100%; font-family: sans-serif; overflow: hidden; }
+      #flood { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background: var(--key); transform-origin: 50% 100%; }
+      #line1, #line2 { position: absolute; left: 0; right: 0; text-align: center; color: var(--ink); font-weight: 800; letter-spacing: -0.02em; }
+      #line1 { top: 760px; font-size: 170px; }
+      #line2 { top: 950px; font-size: 170px; }
+      #sub { position: absolute; left: 0; right: 0; top: 1190px; text-align: center; color: var(--ink); font-size: 44px; font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-width="1080" data-height="1920">
+      <div id="flood" class="clip" data-start="0" data-duration="5" data-track-index="0"></div>
+      <h1 id="line1" class="clip" data-start="0" data-duration="5" data-track-index="1">KAKASHI</h1>
+      <h1 id="line2" class="clip" data-start="0" data-duration="5" data-track-index="2">MINJA</h1>
+      <p id="sub" class="clip" data-start="0" data-duration="5" data-track-index="3">HyperFrames test</p>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#flood", { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "power4.inOut" }, 0);
+      tl.fromTo("#line1", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out" }, 0.45);
+      tl.fromTo("#line2", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out" }, 0.6);
+      tl.fromTo("#sub", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 1.1);
+      tl.to("#line1", { scale: 1.04, duration: 3, ease: "none" }, 1.5);
+      tl.to("#line2", { scale: 1.04, duration: 3, ease: "none" }, 1.5);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

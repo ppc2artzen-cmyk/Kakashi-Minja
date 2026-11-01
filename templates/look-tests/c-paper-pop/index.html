@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Bricolage";src:url("assets/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2");font-weight:800;font-style:normal}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#root{position:relative;width:100%;height:100%;overflow:hidden}
+#cam{position:absolute;inset:0;transform-origin:50% 38%}
+#cam video{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#base{z-index:1}#cut{z-index:30}
+.b{position:absolute;z-index:10}.f{position:absolute;z-index:40}
+
+.strip{position:absolute;z-index:8;left:-60px;width:1200px;clip-path:polygon(0 8%,12% 2%,28% 7%,46% 1%,63% 6%,81% 2%,100% 8%,100% 93%,84% 98%,66% 93%,47% 99%,29% 94%,13% 99%,0 92%)}
+#p1{top:150px;height:330px;background:#FFD60A;transform-origin:0 50%}
+#p2{top:500px;height:330px;background:#1E3DF5;transform-origin:100% 50%}
+.big{font:800 250px/1 "Bricolage",sans-serif;letter-spacing:-.04em;left:0;right:0;text-align:center}
+#w1{top:178px;color:#000}#w2{top:528px;color:#fff}
+.stick{font:800 76px/1 "Bricolage",sans-serif;color:#000;background:#fff;padding:18px 34px;border-radius:10px;white-space:nowrap;box-shadow:10px 10px 0 #1E3DF5}
+#s1{left:90px;top:1250px}#s2{left:170px;top:1380px;background:#FFD60A;box-shadow:10px 10px 0 #000}
+#s3{left:230px;top:1180px;background:#1E3DF5;color:#fff;box-shadow:10px 10px 0 #FFD60A}
+#opp{left:60px;top:1320px;font:800 150px/1 "Bricolage",sans-serif;letter-spacing:-.04em;color:#000;background:#FFD60A;padding:26px 36px;border-radius:14px;box-shadow:14px 14px 0 #000;white-space:nowrap}
+</style></head><body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="5.7" data-width="1080" data-height="1920">
+  <div id="cam">
+    <video id="base" class="clip" data-start="0" data-duration="5.7" data-track-index="0" src="assets/clip.mp4" playsinline data-has-audio="true"></video>
+    <div id="p1" class="clip strip" data-start="0.3" data-duration="2.6" data-track-index="1" style=""></div><div id="p2" class="clip strip" data-start="0.55" data-duration="2.35" data-track-index="1" style=""></div><div id="w1" class="clip b big" data-start="0.38" data-duration="2.52" data-track-index="1" style="">WORK FROM</div><div id="w2" class="clip b big" data-start="0.88" data-duration="2.02" data-track-index="1" style="">HOME</div>
+    <video id="cut" class="clip" data-start="0" data-duration="5.7" data-track-index="9" src="assets/cutout.webm" playsinline muted data-layout-allow-occlusion></video>
+  </div>
+  <div id="s1" class="clip f stick" data-start="1.2" data-duration="1.7" data-track-index="1" style="">opportunity</div><div id="s2" class="clip f stick" data-start="1.75" data-duration="1.15" data-track-index="1" style="">search kar rahe hain?</div><div id="s3" class="clip f stick" data-start="3.9" data-duration="1.8" data-track-index="1" style="">bahut acchi</div><div id="opp" class="clip f" data-start="4.85" data-duration="0.85" data-track-index="1" style="">OPPORTUNITY</div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+
+const pop=(s,t,r)=>tl.fromTo(s,{scale:.2,rotation:r-18,opacity:0},{scale:1,rotation:r,opacity:1,duration:.25,ease:"steps(4)"},t);
+tl.fromTo("#p1",{scaleX:0},{scaleX:1,duration:.25,ease:"steps(5)"},.3);
+tl.fromTo("#p2",{scaleX:0},{scaleX:1,duration:.25,ease:"steps(5)"},.55);
+tl.fromTo("#w1",{x:-70,opacity:0},{x:0,opacity:1,duration:.2,ease:"steps(4)"},.38);
+tl.fromTo("#w2",{x:70,opacity:0},{x:0,opacity:1,duration:.2,ease:"steps(4)"},.88);
+pop("#s1",1.2,-4);pop("#s2",1.75,3);pop("#s3",3.9,-5);pop("#opp",4.85,-3);
+tl.fromTo("#cam",{scale:1},{scale:1.05,duration:2.6,ease:"steps(16)"},.3);
+tl.to("#cam",{scale:1,duration:.2,ease:"steps(4)"},2.9);
+window.__timelines["main"]=tl;tl.seek(0);
+</script></body></html>

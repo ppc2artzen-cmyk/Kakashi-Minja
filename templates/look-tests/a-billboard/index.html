@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Anton";src:url("assets/fonts/anton-latin-400-normal.woff2") format("woff2");font-weight:400;font-style:normal}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#root{position:relative;width:100%;height:100%;overflow:hidden}
+#cam{position:absolute;inset:0;transform-origin:50% 38%}
+#cam video{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#base{z-index:1}#cut{z-index:30}
+.b{position:absolute;z-index:10}.f{position:absolute;z-index:40}
+
+.big{font:400 400px/0.98 "Anton",sans-serif;color:#FFD60A;left:0;right:0;text-align:center;letter-spacing:.005em;text-shadow:0 10px 0 rgba(0,0,0,.28)}
+#w1{top:40px}#w2{top:410px}#w3{top:780px}
+.rail{left:60px;right:60px;top:1500px;text-align:center;font:400 74px/1.1 "Anton",sans-serif;color:#fff;-webkit-text-stroke:10px #000;paint-order:stroke fill;letter-spacing:.02em}
+.rail em{font-style:normal;color:#FFD60A}
+#bar{left:-30px;top:1170px;width:1140px;height:270px;background:#FFD60A;transform-origin:0 50%}
+#opp{left:0;right:0;top:1178px;text-align:center;font:400 232px/1.08 "Anton",sans-serif;color:#000;letter-spacing:.005em}
+#top2{left:0;right:0;top:1040px;text-align:center;font:400 112px/1 "Anton",sans-serif;color:#fff;-webkit-text-stroke:12px #000;paint-order:stroke fill}
+</style></head><body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="5.7" data-width="1080" data-height="1920">
+  <div id="cam">
+    <video id="base" class="clip" data-start="0" data-duration="5.7" data-track-index="0" src="assets/clip.mp4" playsinline data-has-audio="true"></video>
+    <div id="w1" class="clip b big" data-start="0.35" data-duration="2.55" data-track-index="1" style="">WORK</div><div id="w2" class="clip b big" data-start="0.55" data-duration="2.35" data-track-index="1" style="">FROM</div><div id="w3" class="clip b big" data-start="0.88" data-duration="2.02" data-track-index="1" style="">HOME</div>
+    <video id="cut" class="clip" data-start="0" data-duration="5.7" data-track-index="9" src="assets/cutout.webm" playsinline muted data-layout-allow-occlusion></video>
+  </div>
+  <div id="r1" class="clip f rail" data-start="0.4" data-duration="2.5" data-track-index="1" style="">OPPORTUNITY <em>SEARCH</em> KAR RAHE HAIN?</div><div id="top2" class="clip f" data-start="3.9" data-duration="1.8" data-track-index="1" style="">BAHUT ACCHI</div><div id="bar" class="clip f" data-start="4.75" data-duration="0.95" data-track-index="1" style=""></div><div id="opp" class="clip f" data-start="4.9" data-duration="0.8" data-track-index="1" style="">OPPORTUNITY</div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+
+["#w1","#w2","#w3"].forEach((s,i)=>{const t=[.35,.55,.88][i];tl.fromTo(s,{scale:1.9,opacity:0},{scale:1,opacity:1,duration:.2,ease:"power4.out"},t);
+tl.fromTo("#cam",{x:0,y:0},{x:i%2?10:-10,y:8,duration:.04,ease:"none"},t+.16);tl.to("#cam",{x:0,y:0,duration:.14,ease:"power2.out"},t+.2);});
+tl.fromTo("#cam",{scale:1},{scale:1.1,duration:2.2,ease:"power1.inOut"},.4);
+tl.fromTo("#r1",{y:40,opacity:0},{y:0,opacity:1,duration:.22,ease:"power3.out"},.4);
+tl.to("#cam",{scale:1.02,duration:.28,ease:"power4.inOut"},2.84);
+tl.fromTo("#top2",{y:60,opacity:0},{y:0,opacity:1,duration:.24,ease:"power3.out"},3.9);
+tl.to("#cam",{scale:1.14,duration:.3,ease:"power4.out"},4.75);
+tl.fromTo("#bar",{scaleX:0},{scaleX:1,duration:.2,ease:"power4.out"},4.75);
+tl.fromTo("#opp",{scale:1.5,opacity:0},{scale:1,opacity:1,duration:.2,ease:"power4.out"},4.9);
+window.__timelines["main"]=tl;tl.seek(0);
+</script></body></html>

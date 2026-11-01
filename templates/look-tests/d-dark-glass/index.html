@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Sora";src:url("assets/fonts/sora-latin-800-normal.woff2") format("woff2");font-weight:800;font-style:normal}
+@font-face{font-family:"Grotesk";src:url("assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2");font-weight:700;font-style:normal}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#root{position:relative;width:100%;height:100%;overflow:hidden}
+#cam{position:absolute;inset:0;transform-origin:50% 38%}
+#cam video{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#base{z-index:1}#cut{z-index:30}
+.b{position:absolute;z-index:10}.f{position:absolute;z-index:40}
+
+#dim{position:absolute;inset:0;z-index:5;background:linear-gradient(180deg,rgba(6,6,10,.86) 0%,rgba(6,6,10,.62) 45%,rgba(6,6,10,.9) 100%)}
+.big{font:800 248px/.98 "Sora",sans-serif;letter-spacing:-.05em;left:0;right:0;text-align:center;color:#FFC400;background:linear-gradient(180deg,#FFE97A 0%,#FFB300 60%,#FF7A00 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#w1{top:150px}#w2{top:400px}#w3{top:650px}
+.glass{position:absolute;z-index:40;left:90px;right:90px;border-radius:40px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.4);box-shadow:0 30px 80px rgba(0,0,0,.5);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);padding:36px 44px;color:#fff}
+.lab{font:700 34px/1.2 "Grotesk",sans-serif;letter-spacing:.14em;color:#FFC400}
+.val{font:800 74px/1.1 "Sora",sans-serif;letter-spacing:-.03em;margin-top:8px}
+#g1{top:1330px}#g2{top:1290px}
+#fill{height:12px;border-radius:6px;margin-top:24px;background:linear-gradient(90deg,#FFE97A,#FF7A00);transform-origin:0 50%}
+</style></head><body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="5.7" data-width="1080" data-height="1920">
+  <div id="cam">
+    <video id="base" class="clip" data-start="0" data-duration="5.7" data-track-index="0" src="assets/clip.mp4" playsinline data-has-audio="true"></video>
+    <div id="dim"></div><div id="w1" class="clip b big" data-start="0.35" data-duration="2.55" data-track-index="1" style="">WORK</div><div id="w2" class="clip b big" data-start="0.55" data-duration="2.35" data-track-index="1" style="">FROM</div><div id="w3" class="clip b big" data-start="0.88" data-duration="2.02" data-track-index="1" style="">HOME</div>
+    <video id="cut" class="clip" data-start="0" data-duration="5.7" data-track-index="9" src="assets/cutout.webm" playsinline muted data-layout-allow-occlusion></video>
+  </div>
+  <div id="g1" class="clip glass" data-start="1.1" data-duration="1.8" data-track-index="1" style=""><div class="lab">LOOKING FOR</div><div class="val">An opportunity?</div></div><div id="g2" class="clip glass" data-start="3.9" data-duration="1.8" data-track-index="1" style=""><div class="lab">BAHUT ACCHI</div><div class="val" id="v2">Opportunity</div><div id="fill"></div></div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+
+["#w1","#w2","#w3"].forEach((s,i)=>{tl.fromTo(s,{y:120,opacity:0},{y:0,opacity:1,duration:.4,ease:"power4.out"},[.35,.55,.88][i]);});
+tl.fromTo("#cam",{scale:1},{scale:1.07,duration:2.5,ease:"power1.inOut"},.3);
+tl.fromTo("#g1",{y:90,opacity:0},{y:0,opacity:1,duration:.4,ease:"back.out(1.5)"},1.1);
+tl.to("#cam",{scale:1,duration:.32,ease:"power4.inOut"},2.86);
+tl.fromTo("#g2",{y:90,opacity:0},{y:0,opacity:1,duration:.4,ease:"back.out(1.5)"},3.9);
+tl.fromTo("#fill",{scaleX:0},{scaleX:1,duration:.75,ease:"power2.inOut"},4.8);
+window.__timelines["main"]=tl;tl.seek(0);
+</script></body></html>

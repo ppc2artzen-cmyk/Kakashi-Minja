@@ -55,7 +55,9 @@ jobs:
           cache: npm
 
       - name: Show machine
-        run: echo "CPUs: $(nproc)"; free -h
+        run: |
+          echo "CPUs: $(nproc)"
+          free -h
 
       - name: Install ffmpeg and rclone
         run: |

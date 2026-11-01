@@ -84,7 +84,7 @@ jobs:
           for i, b in enumerate(plan["beats"]):
               take = next(k for k in plan["takes"] if k["from"] <= b["t"] < k["to"])
               best = None
-              for off in [x * 0.05 for x in range(-10, 11)]:
+              for off in [x * 0.05 for x in range(-int(b["win"] / 0.05), int(b["win"] / 0.05) + 1)]:
                   t = b["t"] + off
                   if not take["from"] + 0.03 <= t < take["to"] - 0.03: continue
                   cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
@@ -136,14 +136,12 @@ jobs:
               path = f"{P}/assets/c{i}.png"
               im = cv2.imread(path, cv2.IMREAD_UNCHANGED)
               H, W = im.shape[:2]
-              m = np.ones((H, W), np.float32)
-              top = int(f["top"] - 0.45 * f["h"])
-              m[: max(0, top)] = 0
-              shoulder = int(f["top"] + 1.25 * f["h"])
-              half = 0.82 * f["h"]
-              xs = np.arange(W)
-              m[:shoulder, np.abs(xs - f["cx"]) > half] = 0
-              m = cv2.GaussianBlur(m, (31, 31), 0)
+              # A head-shaped oval, plus everything below the chin
+              m = np.zeros((H, W), np.float32)
+              cy = int(f["top"] + 0.42 * f["h"])
+              cv2.ellipse(m, (int(f["cx"]), cy), (int(0.72 * f["h"]), int(0.98 * f["h"])), 0, 0, 360, 1, -1)
+              m[int(f["top"] + 1.05 * f["h"]) :] = 1
+              m = cv2.GaussianBlur(m, (41, 41), 0)
               im[:, :, 3] = (im[:, :, 3] * m).astype(np.uint8)
               cv2.imwrite(path, im)
           PY

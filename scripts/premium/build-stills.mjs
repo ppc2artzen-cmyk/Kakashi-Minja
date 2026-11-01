@@ -23,7 +23,7 @@ const beats = [
   { t: 2.5, name: "Caption, VFX, sound effect", front:
       `<div class="stack">${b("card on", '<span class="ic">Aa</span>CAPTION')}${b("card", '<span class="ic">&#10022;</span>VFX')}${b("card", '<span class="ic wave"><i></i><i></i><i></i><i></i><i></i></span>SOUND EFFECT')}</div>` },
   { t: 4.6, name: "Greeting and emoji", front: b("emoji", "&#128075;", "left:90px;top:640px") + rail("SO HI GUYS", "") },
-  { t: 5.45, name: "Name behind him, face highlighted", dim: true, behind: b("giant", "MANISH", "top:40px;font-size:318px;color:#F7EEDD"), ring: true,
+  { t: 5.0, win: 0.3, name: "Name behind him, face highlighted", dim: true, behind: b("giant", "MANISH", "top:60px;font-size:330px;color:#F7EEDD"), ring: true,
     front: rail("MY NAME IS", "MANISH") },
   { t: 6.5, name: "Seventh day", front: `<div class="cal"><div class="calT">DAY</div><div class="calN">7</div></div>` + rail("IT'S MY", "7TH DAY") },
   { t: 7.75, name: "10 lakh with money images", bg: "assets/rupee.jpg", behind: b("giant", `${RUPEE}10 LAKH`, "top:50px;font-size:252px;color:#F7EEDD") + `<div class="photo mid" style="left:-30px;top:640px;transform:rotate(-7deg)"><img src="assets/hand.jpg" alt="" /></div><div class="photo mid" style="left:730px;top:690px;transform:rotate(6deg)"><img src="assets/rupee.jpg" alt="" /></div>`,
@@ -34,7 +34,7 @@ const beats = [
   { t: 12.2, name: "I save your time", front:
       `<div class="clock" style="left:46px;top:900px;width:320px;height:320px"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="cb"/><circle cx="50" cy="50" r="44" class="cf" pathLength="100"/><path d="M50 50V18M50 50l20 12" class="ch"/></svg></div>` + rail("BUT AAPKA", "TIME SAVE") },
   { t: 13.7, name: "Comment SKILLS", card: true, front:
-      `<div class="phone"><div class="pHead">Comments</div><div class="line"><b></b><u style="width:70%"></u></div><div class="line"><b></b><u style="width:52%"></u></div><div class="line"><b></b><u style="width:62%"></u></div><div class="input">SKILLS<span class="send">&#10148;</span></div></div>` + rail("MUJHE BAS", "COMMENT KARO") },
+      `<div class="phone"><div class="pHead">Comments</div><div class="line"><b></b><u style="width:70%"></u></div><div class="line"><b></b><u style="width:52%"></u></div><div class="line"><b></b><u style="width:62%"></u></div><div class="line"><b></b><u style="width:74%"></u></div><div class="line"><b></b><u style="width:48%"></u></div><div class="line"><b></b><u style="width:66%"></u></div><div class="input">SKILLS<span class="send">&#10148;</span></div></div>` + rail("MUJHE BAS", "COMMENT KARO") },
   { t: 15.9, name: "Links in your DMs", card: true, front:
       `<div class="phone"><div class="pHead">Messages</div><div class="bub">SKILLS</div><div class="bub me">Yeh rahe saare links</div><div class="lnk"><i></i>Link 1</div><div class="lnk"><i></i>Link 2</div><div class="lnk"><i></i>Link 3</div></div>` + rail("AAPKI DMS MEIN", "SAARE LINKS") },
   { t: 18.0, name: "Edit professionally", behind: b("giant", "PRO EDIT", "top:50px;font-size:300px;color:#7E1434"),
@@ -76,7 +76,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
 .photo.mid{z-index:20;width:360px;height:440px}
 .photo{position:absolute;z-index:46;width:380px;height:470px;border-radius:28px;overflow:hidden;border:6px solid #F7EEDD;box-shadow:0 26px 60px rgba(0,0,0,.45)}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
-.sad{position:absolute;z-index:20;left:-260px;top:300px;width:1600px;height:1000px;object-fit:contain;object-position:center bottom;filter:saturate(.6)}
+.sad{position:absolute;z-index:20;left:-260px;top:345px;width:1600px;height:1000px;object-fit:contain;object-position:center bottom;filter:saturate(.6)}
 .blurbase{position:absolute;left:-60px;top:-60px;width:1200px;height:2040px;object-fit:cover;z-index:2;filter:blur(16px) brightness(.62)}
 .clock{position:absolute;z-index:46;left:40px;top:760px;width:380px;height:380px;background:rgba(30,6,14,.7);border-radius:50%}
 .clock svg{width:100%;height:100%}.cb,.cf,.ch{fill:none;stroke-linecap:round}.cb{stroke:rgba(247,238,221,.3);stroke-width:7}.cf{stroke:#F7EEDD;stroke-width:7;stroke-dasharray:72 100;transform:rotate(-90deg);transform-origin:50% 50%}.ch{stroke:#fff;stroke-width:5}
@@ -115,5 +115,5 @@ const html = `<!doctype html>
 `;
 mkdirSync(dir, { recursive: true });
 writeFileSync(join(dir, "index.html"), html);
-writeFileSync(join(dir, "plan.json"), JSON.stringify({ takes: TAKES, beats: beats.map((x) => ({ t: x.t, name: x.name })) }, null, 1));
+writeFileSync(join(dir, "plan.json"), JSON.stringify({ takes: TAKES, beats: beats.map((x) => ({ t: x.t, win: x.win || 0.5, name: x.name })) }, null, 1));
 console.log(`${beats.length} stills`);

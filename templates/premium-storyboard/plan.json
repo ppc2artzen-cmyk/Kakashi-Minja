@@ -44,50 +44,62 @@
  "beats": [
   {
    "t": 1,
+   "win": 0.5,
    "name": "Hook"
   },
   {
    "t": 2.5,
+   "win": 0.5,
    "name": "Caption, VFX, sound effect"
   },
   {
    "t": 4.6,
+   "win": 0.5,
    "name": "Greeting and emoji"
   },
   {
-   "t": 5.45,
+   "t": 5,
+   "win": 0.3,
    "name": "Name behind him, face highlighted"
   },
   {
    "t": 6.5,
+   "win": 0.5,
    "name": "Seventh day"
   },
   {
    "t": 7.75,
+   "win": 0.5,
    "name": "10 lakh with money images"
   },
   {
    "t": 8.75,
+   "win": 0.5,
    "name": "Coaching business"
   },
   {
    "t": 10.5,
+   "win": 0.5,
    "name": "18 hours, sad person"
   },
   {
    "t": 12.2,
+   "win": 0.5,
    "name": "I save your time"
   },
   {
    "t": 13.7,
+   "win": 0.5,
    "name": "Comment SKILLS"
   },
   {
    "t": 15.9,
+   "win": 0.5,
    "name": "Links in your DMs"
   },
   {
    "t": 18,
+   "win": 0.5,
    "name": "Edit professionally"
   }
  ]

@@ -1,0 +1,146 @@
+{
+ "keep": [
+  [
+   0.74,
+   7.66
+  ],
+  [
+   7.94,
+   10.98
+  ],
+  [
+   11.25,
+   13.83
+  ],
+  [
+   14.11,
+   16.4
+  ],
+  [
+   25.54,
+   32.2
+  ]
+ ],
+ "hold": 1.2,
+ "duration": 22.69,
+ "beats": {
+  "b1": [
+   0,
+   2.68
+  ],
+  "b2": [
+   2.73,
+   6.92
+  ],
+  "b3": [
+   6.92,
+   9.96
+  ],
+  "b4": [
+   9.96,
+   12.54
+  ],
+  "b5": [
+   12.54,
+   14.83
+  ],
+  "b6": [
+   14.83,
+   16.56
+  ],
+  "b7": [
+   16.56,
+   19.54
+  ],
+  "b8": [
+   19.54,
+   22.69
+  ]
+ },
+ "sfx": [
+  {
+   "t": 1.37,
+   "f": "pop/fs-258269-mouth-pop.ogg"
+  },
+  {
+   "t": 3.53,
+   "f": "click/fs788933.ogg"
+  },
+  {
+   "t": 4.91,
+   "f": "click/kenney-interface-select-001.ogg"
+  },
+  {
+   "t": 6.03,
+   "f": "click/kenney-interface-select-003.ogg"
+  },
+  {
+   "t": 6.85,
+   "f": "whoosh/fs-683101-quick-woosh.ogg"
+  },
+  {
+   "t": 7.29,
+   "f": "impact/kenney-impact-impactpunch-heavy-000.ogg"
+  },
+  {
+   "t": 8.93,
+   "f": "ding/kenney-interface-confirmation-001.ogg"
+  },
+  {
+   "t": 9.89,
+   "f": "whoosh/fs810485.ogg"
+  },
+  {
+   "t": 10.22,
+   "f": "impact/fs-177242-cinematic-impact.ogg"
+  },
+  {
+   "t": 10.54,
+   "f": "impact/kenney-impact-impactpunch-heavy-001.ogg"
+  },
+  {
+   "t": 13.6,
+   "f": "pop/fs-447910-plop.ogg"
+  },
+  {
+   "t": 14.3,
+   "f": "riser/kenney-digital-powerup1.ogg"
+  },
+  {
+   "t": 14.76,
+   "f": "whoosh/fs830856.ogg"
+  },
+  {
+   "t": 15.86,
+   "f": "impact/fs745291.ogg"
+  },
+  {
+   "t": 16.56,
+   "f": "transition/fs-786514-swoosh-v2.ogg"
+  },
+  {
+   "t": 17.9,
+   "f": "click/kenney-interface-click-001.ogg"
+  },
+  {
+   "t": 18.44,
+   "f": "typing/fs-416777-digital-typing-wav.ogg"
+  },
+  {
+   "t": 19.22,
+   "f": "ding/kenney-interface-confirmation-002.ogg"
+  },
+  {
+   "t": 19.47,
+   "f": "whoosh/fs393811.ogg"
+  },
+  {
+   "t": 20.26,
+   "f": "pop/fs-824189-pop-in-sfx.ogg"
+  },
+  {
+   "t": 21.49,
+   "f": "impact/kenney-impact-impactsoft-heavy-000.ogg"
+  }
+ ]
+}

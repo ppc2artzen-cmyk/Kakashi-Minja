@@ -1,0 +1,140 @@
+name: Render Billboard edit
+
+# draft: quick test and frames. final: full quality, uploaded to Drive. Files are kept 1 day: this repo is public.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [draft, final]
+        default: draft
+      drive_file_id:
+        description: "Google Drive file ID of the raw video"
+        required: true
+      output_folder_id:
+        description: "Drive folder ID for the final video"
+        required: true
+        default: "1Qhi7BR7I5VqVyxVZhehMo6jWXUttJ8w_"
+      name:
+        description: "Label for the output file (no spaces)"
+        required: true
+        default: "project1-billboard"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      HYPERFRAMES_NO_TELEMETRY: "1"
+      DO_NOT_TRACK: "1"
+      MODE: ${{ github.event.inputs.mode }}
+      FILE_ID: ${{ github.event.inputs.drive_file_id }}
+      OUT_FOLDER: ${{ github.event.inputs.output_folder_id }}
+      LABEL: ${{ github.event.inputs.name }}
+      P: templates/billboard-project1
+      RCLONE_CONFIG_GD_TYPE: drive
+      RCLONE_CONFIG_GD_SCOPE: drive
+      GD_CID: ${{ secrets.GDRIVE_CLIENT_ID }}
+      GD_CSEC: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+      GD_RT: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg rclone
+          echo "CPUs: $(nproc)"
+
+      - name: Set up Drive login
+        run: |
+          RT=$(printf '%s' "$GD_RT" | tr -d '[:space:]"{}')
+          CID=$(printf '%s' "$GD_CID" | tr -d '[:space:]"')
+          CSEC=$(printf '%s' "$GD_CSEC" | tr -d '[:space:]"')
+          echo "::add-mask::$RT"
+          {
+            echo "RCLONE_CONFIG_GD_CLIENT_ID=$CID"
+            echo "RCLONE_CONFIG_GD_CLIENT_SECRET=$CSEC"
+            echo "RCLONE_CONFIG_GD_TOKEN={\"access_token\":\"\",\"token_type\":\"Bearer\",\"refresh_token\":\"$RT\",\"expiry\":\"2000-01-01T00:00:00Z\"}"
+          } >> "$GITHUB_ENV"
+
+      - name: Cut the edit from Drive
+        run: |
+          mkdir -p work out/check "$P/assets"
+          rclone backend copyid GD: "$FILE_ID" work/raw.mp4 --drive-acknowledge-abuse
+          F=$(node -e '
+            const e=require(process.env.P.replace(/^/,"./")+"/edit.json");
+            const v=e.keep.map(([a,b],i)=>`[0:v]trim=${a}:${b},setpts=PTS-STARTPTS,fps=30,scale=1080:1920:flags=lanczos,format=yuv420p[v${i}];[0:a]atrim=${a}:${b},asetpts=PTS-STARTPTS,afade=t=in:d=0.012,afade=t=out:st=${(b-a-0.012).toFixed(3)}:d=0.012[a${i}]`).join(";");
+            const c=e.keep.map((_,i)=>`[v${i}][a${i}]`).join("");
+            console.log(`${v};${c}concat=n=${e.keep.length}:v=1:a=1[v];[v]tpad=stop_mode=clone:stop_duration=${e.hold}[vo];[a]apad=pad_dur=${e.hold},loudnorm=I=-16:TP=-3:LRA=7,aresample=48000[ao]`);
+          ')
+          ffmpeg -nostdin -loglevel error -y -i work/raw.mp4 -filter_complex "$F" -map "[vo]" -map "[ao]" -c:v libx264 -crf 15 -preset medium -pix_fmt yuv420p -c:a aac -b:a 256k work/clip.mp4
+          ffprobe -v error -show_entries format=duration -of csv=p=0 work/clip.mp4
+          echo "HASH=$(sha256sum work/clip.mp4 | cut -c1-16)" >> "$GITHUB_ENV"
+
+      - name: Reuse the speaker cutout if we already have it
+        id: cut
+        uses: actions/cache@v4
+        with:
+          path: work/cutout.webm
+          key: cutout-${{ env.HASH }}
+
+      - name: Cut the speaker out of the background
+        if: steps.cut.outputs.cache-hit != 'true'
+        run: time npx -y hyperframes@0.8.226 remove-background work/clip.mp4 -o work/cutout.webm --device cpu
+
+      - name: Prepare the project
+        run: |
+          cp work/clip.mp4 work/cutout.webm "$P/assets/"
+          mkdir -p "$P/assets/fonts"
+          cp templates/look-tests/fonts/anton-latin-400-normal.woff2 "$P/assets/fonts/"
+          mkdir -p "$P/assets/sfx"
+          cp -r .claude/skills/pro-edit/sound-effects/sfx/* "$P/assets/sfx/"
+          rm -f "$P/assets/sfx/manifest.json"
+          npx -y hyperframes@0.8.226 check "$P" --json > out/check/check.json || true
+          node -e 'const c=require("./out/check/check.json");console.log(JSON.stringify({ok:c.ok,errorCount:c.errorCount,warningCount:c.warningCount}))' || true
+
+      - name: Render
+        run: |
+          S=$(date +%s)
+          if [ "$MODE" = "draft" ]; then Q=draft; else Q=delivery; fi
+          npx -y hyperframes@0.8.226 render "$P" -o out/final.mp4 --quality "$Q"
+          echo "Render seconds ($Q): $(( $(date +%s) - S ))"
+
+      - name: Measure and check the result
+        run: |
+          ffprobe -v error -show_entries stream=codec_type,codec_name,width,height,r_frame_rate:format=duration,size -of default=nw=1 out/final.mp4 | tee out/check/info.txt
+          ffmpeg -nostdin -hide_banner -nostats -i out/final.mp4 -af ebur128=peak=true -f null - 2>&1 | tail -16 | tee out/check/loudness.txt
+          node -e '
+            const e=require(process.env.P.replace(/^/,"./")+"/edit.json");const t=[];
+            for(const [k,[a,b]] of Object.entries(e.beats)){const d=b-a;t.push([k+"a",a+d*.35],[k+"b",a+d*.85]);}
+            console.log(t.map(([k,v])=>k+" "+v.toFixed(2)).join("\n"));
+          ' > out/check/times.txt
+          while read n t; do
+            ffmpeg -nostdin -loglevel error -y -ss "$t" -i out/final.mp4 -frames:v 1 -vf "scale=540:-2" -q:v 3 "out/check/f_$n.jpg"
+          done < out/check/times.txt
+
+      - name: Upload the final to Drive
+        if: env.MODE == 'final'
+        run: |
+          STAMP=$(TZ=Asia/Kolkata date +%Y-%m-%d_%H%M)
+          NAME="${STAMP}_${LABEL}_final.mp4"
+          cp out/final.mp4 "out/$NAME"
+          rclone copy "out/$NAME" GD: --drive-root-folder-id "$OUT_FOLDER" -v
+          echo "$NAME" | tee out/check/drive-name.txt
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: billboard-${{ env.MODE }}
+          path: |
+            out/check
+            out/final.mp4
+          retention-days: 1

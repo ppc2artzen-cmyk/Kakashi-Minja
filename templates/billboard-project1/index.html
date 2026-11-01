@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Anton";src:url("assets/fonts/anton-latin-400-normal.woff2") format("woff2");font-weight:400}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#root{position:relative;width:100%;height:100%;overflow:hidden;font-family:"Anton",sans-serif}
+#cam{position:absolute;inset:0;transform-origin:50% 38%}
+#cam video{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#base{z-index:1}#cut{z-index:30}
+.b{position:absolute;z-index:10}.f{position:absolute;z-index:40}
+.big{left:0;right:0;text-align:center;font-weight:400;font-size:400px;line-height:.98;color:#FFD60A;letter-spacing:.005em;text-shadow:0 10px 0 rgba(0,0,0,.28)}
+#w1{top:40px}#w2{top:410px}#w3{top:780px}
+.sm{font-size:300px;top:90px}.sm2{font-size:250px;top:400px}
+.huge{font-size:520px}#k1{top:30px}#k2{top:520px}
+#rays{left:-500px;top:-250px;width:2080px;height:2080px;border-radius:50%;background:repeating-conic-gradient(#FFD60A 0 10deg,transparent 10deg 20deg);opacity:.92}
+.rail{left:50px;right:50px;top:1500px;text-align:center;font-size:76px;line-height:1.1;color:#fff;-webkit-text-stroke:10px #000;paint-order:stroke fill;letter-spacing:.02em}
+.rail em{font-style:normal;color:#FFD60A}
+.topRail{top:930px}
+.bar{left:-30px;width:1140px;top:1170px;height:260px;background:#FFD60A;transform-origin:0 50%}
+.barText{left:0;right:0;top:1180px;text-align:center;color:#000;font-size:190px;line-height:1.22;letter-spacing:.01em}
+.big2{font-size:214px;line-height:1.12}.big3{font-size:176px;line-height:1.36}
+.chip{left:70px;display:flex;align-items:center;gap:26px;background:#FFD60A;color:#000;font-size:100px;line-height:1.16;padding:14px 40px 14px 18px;letter-spacing:.01em;white-space:nowrap}
+.chip b{display:flex;align-items:center;justify-content:center;width:104px;height:104px;background:#000;color:#FFD60A;flex:none}
+#c1{top:1040px}#c2{top:1200px}#c3{top:1360px}
+.tag{left:0;right:0;text-align:center;top:1110px;color:#000}
+#bal,#kh{left:50%;right:auto;background:#FFD60A;font-size:120px;line-height:1.2;padding:4px 44px;white-space:nowrap;margin-left:-250px}
+#kh{top:1240px;margin-left:-260px}
+#chart{left:190px;width:700px;top:1290px;height:300px;display:flex;align-items:flex-end;gap:30px;padding:30px;background:rgba(0,0,0,.72);border:4px solid #FFD60A}
+#chart i{flex:1;background:#FFD60A;height:210px;transform-origin:50% 100%}
+.top2{left:0;right:0;top:1040px;text-align:center;font-size:112px;line-height:1;color:#fff;-webkit-text-stroke:12px #000;paint-order:stroke fill}
+#phone{left:290px;top:1030px;width:500px;height:640px;background:#fff;border:14px solid #0b0b0b;border-radius:56px;padding:44px 30px 30px;color:#000;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.pt{display:flex;align-items:center;gap:14px;font-size:46px;line-height:1.2;letter-spacing:.02em;margin-bottom:24px}
+.fld{height:90px;background:#ececec;margin-bottom:18px;overflow:hidden}.fld u{display:block;height:100%;background:#FFD60A;transform-origin:0 50%}
+#btn{background:#000;color:#FFD60A;text-align:center;font-size:62px;line-height:1;padding:34px 8px;margin-top:40px;letter-spacing:.02em}
+#rip{left:390px;top:1395px;width:300px;height:300px;border:12px solid #FFD60A;border-radius:50%}
+#cur{left:520px;top:1400px;color:#000}#cur span{display:block;color:#000}#cur svg{fill:#fff;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
+#ar{left:445px;top:1440px;color:#FFD60A;filter:drop-shadow(0 6px 0 #000)}
+#cta{top:1660px}
+.whip{position:absolute;z-index:60;left:-80px;top:0;width:1240px;height:1920px;background:#FFD60A}
+</style></head><body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="22.69" data-width="1080" data-height="1920" data-fps="30">
+  <div id="cam">
+    <video id="base" class="clip" data-start="0" data-duration="22.69" data-track-index="0" src="assets/clip.mp4" playsinline data-has-audio="true"></video>
+    <div id="mo1" class="clip b big sm" data-start="7.290" data-duration="2.670" data-track-index="2">MONTHLY</div>
+<div id="mo2" class="clip b big sm2" data-start="7.590" data-duration="2.370" data-track-index="3">EXPENSES</div>
+<div id="w1" class="clip b big" data-start="10.220" data-duration="2.320" data-track-index="4">WORK</div>
+<div id="w2" class="clip b big" data-start="10.380" data-duration="2.160" data-track-index="5">FROM</div>
+<div id="w3" class="clip b big" data-start="10.540" data-duration="2.000" data-track-index="6">HOME</div>
+<div id="rays" class="clip b" data-start="14.300" data-duration="0.530" data-track-index="7"></div>
+<div id="k1" class="clip b big huge" data-start="14.900" data-duration="1.660" data-track-index="8">KUCH</div>
+<div id="k2" class="clip b big huge" data-start="15.860" data-duration="0.700" data-track-index="1">NAHI</div>
+    <video id="cut" class="clip" data-start="0" data-duration="22.69" data-track-index="9" src="assets/cutout.webm" playsinline muted data-layout-allow-occlusion></video>
+  </div>
+  <div id="hi" class="clip f rail" data-start="0.000" data-duration="1.370" data-track-index="2">HELLO GUYS, NAMASTE</div>
+<div id="nbar" class="clip f bar" data-start="1.310" data-duration="1.370" data-track-index="3"></div>
+<div id="nm" class="clip f barText" data-start="1.370" data-duration="1.310" data-track-index="4">KRIPA TALREJA</div>
+<div id="agar" class="clip f rail topRail" data-start="2.730" data-duration="4.190" data-track-index="5">AGAR AAP BHI</div>
+<div id="c1" class="clip f chip" data-start="3.530" data-duration="3.390" data-track-index="6"><b><svg viewBox="0 0 24 24" width="70" height="70" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M20 6 9 17l-5-5"/></svg></b>OFFICE GOING</div>
+<div id="c2" class="clip f chip" data-start="4.910" data-duration="2.010" data-track-index="7"><b><svg viewBox="0 0 24 24" width="70" height="70" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M20 6 9 17l-5-5"/></svg></b>COLLEGE STUDENT</div>
+<div id="c3" class="clip f chip" data-start="6.030" data-duration="0.890" data-track-index="8"><b><svg viewBox="0 0 24 24" width="70" height="70" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M20 6 9 17l-5-5"/></svg></b>HOUSE WIFE</div>
+<div id="bal" class="clip f tag" data-start="8.930" data-duration="1.030" data-track-index="1">BALANCE</div>
+<div id="chart" class="clip f" data-start="8.480" data-duration="1.480" data-track-index="2"><i id="h1"></i><i id="h2"></i><i id="h3"></i><i id="h4"></i></div>
+<div id="sr" class="clip f rail" data-start="10.840" data-duration="1.700" data-track-index="3">OPPORTUNITY <em>SEARCH</em> KAR RAHE HAIN?</div>
+<div id="mn" class="clip f rail" data-start="12.540" data-duration="1.060" data-track-index="4">MAIN AAPKE LIYE LAYI HOON</div>
+<div id="ba" class="clip f top2" data-start="13.600" data-duration="1.230" data-track-index="5">BAHUT ACCHI</div>
+<div id="obar" class="clip f bar" data-start="14.230" data-duration="0.600" data-track-index="6"></div>
+<div id="opp" class="clip f barText big2" data-start="14.300" data-duration="0.530" data-track-index="7">OPPORTUNITY</div>
+<div id="kh" class="clip f tag" data-start="16.100" data-duration="0.460" data-track-index="8">KARNA HAI</div>
+<div id="bl" class="clip f rail topRail" data-start="16.560" data-duration="1.340" data-track-index="1">BAS LINK PAR</div>
+<div id="phone" class="clip f" data-start="16.560" data-duration="2.980" data-track-index="2"><div class="pt"><svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg>YOUR LINK</div><div class="fld"><u id="f1"></u></div><div class="fld"><u id="f2"></u></div><div id="btn">CLICK KARIYE</div></div>
+<div id="rip" class="clip f" data-start="17.900" data-duration="0.550" data-track-index="3"></div>
+<div id="cur" class="clip f" data-start="16.560" data-duration="2.980" data-track-index="4"><span><svg viewBox="0 0 24 24" width="150" height="150" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M4 3l7.5 18 2.6-7.4L21.5 11z"/></svg></span></div>
+<div id="ck" class="clip f rail topRail" data-start="17.900" data-duration="0.540" data-track-index="5">ABHI CLICK KARIYE</div>
+<div id="ff" class="clip f rail topRail" data-start="18.440" data-duration="1.100" data-track-index="6">FORM FILL KARIYE</div>
+<div id="mbar" class="clip f bar" data-start="19.920" data-duration="2.770" data-track-index="7"></div>
+<div id="mv" class="clip f barText big3" data-start="19.920" data-duration="2.770" data-track-index="8">JUST MOVE AHEAD</div>
+<div id="ar" class="clip f" data-start="20.260" data-duration="2.430" data-track-index="1"><svg viewBox="0 0 24 24" width="190" height="190" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M4 12h15"/><path d="m13 5 7 7-7 7"/></svg></div>
+<div id="cta" class="clip f rail" data-start="21.390" data-duration="1.300" data-track-index="2">CLICK THE LINK</div>
+  <div id="whip0" class="clip whip" data-start="6.800" data-duration="0.260" data-track-index="3"></div>
+<div id="whip1" class="clip whip" data-start="9.840" data-duration="0.260" data-track-index="4"></div>
+<div id="whip2" class="clip whip" data-start="14.710" data-duration="0.260" data-track-index="5"></div>
+<div id="whip3" class="clip whip" data-start="19.420" data-duration="0.260" data-track-index="6"></div>
+  <audio id="sfx0" class="clip" data-start="1.370" data-track-index="20" data-volume="0.5" src="assets/sfx/pop/fs-258269-mouth-pop.ogg"></audio>
+<audio id="sfx1" class="clip" data-start="3.530" data-track-index="21" data-volume="0.55" src="assets/sfx/click/fs788933.ogg"></audio>
+<audio id="sfx2" class="clip" data-start="4.910" data-track-index="22" data-volume="0.55" src="assets/sfx/click/kenney-interface-select-001.ogg"></audio>
+<audio id="sfx3" class="clip" data-start="6.030" data-track-index="23" data-volume="0.55" src="assets/sfx/click/kenney-interface-select-003.ogg"></audio>
+<audio id="sfx4" class="clip" data-start="6.850" data-track-index="24" data-volume="0.5" src="assets/sfx/whoosh/fs-683101-quick-woosh.ogg"></audio>
+<audio id="sfx5" class="clip" data-start="7.290" data-track-index="25" data-volume="0.4" src="assets/sfx/impact/kenney-impact-impactpunch-heavy-000.ogg"></audio>
+<audio id="sfx6" class="clip" data-start="8.930" data-track-index="26" data-volume="0.45" src="assets/sfx/ding/kenney-interface-confirmation-001.ogg"></audio>
+<audio id="sfx7" class="clip" data-start="9.890" data-track-index="27" data-volume="0.55" src="assets/sfx/whoosh/fs810485.ogg"></audio>
+<audio id="sfx8" class="clip" data-start="10.220" data-track-index="28" data-volume="1" src="assets/sfx/impact/fs-177242-cinematic-impact.ogg"></audio>
+<audio id="sfx9" class="clip" data-start="10.540" data-track-index="29" data-volume="0.5" src="assets/sfx/impact/kenney-impact-impactpunch-heavy-001.ogg"></audio>
+<audio id="sfx10" class="clip" data-start="13.600" data-track-index="30" data-volume="0.45" src="assets/sfx/pop/fs-447910-plop.ogg"></audio>
+<audio id="sfx11" class="clip" data-start="14.300" data-track-index="31" data-volume="0.5" src="assets/sfx/riser/kenney-digital-powerup1.ogg"></audio>
+<audio id="sfx12" class="clip" data-start="14.760" data-track-index="32" data-volume="0.5" src="assets/sfx/whoosh/fs830856.ogg"></audio>
+<audio id="sfx13" class="clip" data-start="15.860" data-track-index="33" data-volume="0.55" src="assets/sfx/impact/fs745291.ogg"></audio>
+<audio id="sfx14" class="clip" data-start="16.560" data-track-index="34" data-volume="0.45" src="assets/sfx/transition/fs-786514-swoosh-v2.ogg"></audio>
+<audio id="sfx15" class="clip" data-start="17.900" data-track-index="35" data-volume="0.8" src="assets/sfx/click/kenney-interface-click-001.ogg"></audio>
+<audio id="sfx16" class="clip" data-start="18.440" data-track-index="36" data-volume="0.3" src="assets/sfx/typing/fs-416777-digital-typing-wav.ogg"></audio>
+<audio id="sfx17" class="clip" data-start="19.220" data-track-index="37" data-volume="0.45" src="assets/sfx/ding/kenney-interface-confirmation-002.ogg"></audio>
+<audio id="sfx18" class="clip" data-start="19.470" data-track-index="38" data-volume="0.5" src="assets/sfx/whoosh/fs393811.ogg"></audio>
+<audio id="sfx19" class="clip" data-start="20.260" data-track-index="39" data-volume="0.5" src="assets/sfx/pop/fs-824189-pop-in-sfx.ogg"></audio>
+<audio id="sfx20" class="clip" data-start="21.490" data-track-index="40" data-volume="0.55" src="assets/sfx/impact/kenney-impact-impactsoft-heavy-000.ogg"></audio>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+
+const slam=(s,t)=>{tl.fromTo(s,{scale:1.9,opacity:0},{scale:1,opacity:1,duration:.2,ease:"power4.out"},t);};
+const rise=(s,t)=>tl.fromTo(s,{y:44,opacity:0},{y:0,opacity:1,duration:.22,ease:"power3.out"},t);
+const barIn=(s,t)=>tl.fromTo(s,{scaleX:0},{scaleX:1,duration:.2,ease:"power4.out"},t);
+const shake=(t,a)=>{tl.to("#cam",{x:a,y:a*.8,duration:.04,ease:"none"},t+.12);tl.to("#cam",{x:0,y:0,duration:.16,ease:"power2.out"},t+.16);};
+const chip=(s,t)=>tl.fromTo(s,{x:-1100},{x:0,duration:.26,ease:"back.out(1.5)"},t);
+
+// camera
+tl.set("#cam",{scale:1},0);
+tl.to("#cam",{scale:1.06,duration:1.370,ease:"none"},0);
+tl.to("#cam",{scale:1.16,duration:.22,ease:"power4.out"},1.37);
+tl.set("#cam",{scale:1},2.73);
+tl.to("#cam",{scale:1.09,duration:4.190,ease:"none"},2.73);
+tl.set("#cam",{scale:1.05},6.92);
+tl.to("#cam",{scale:1.12,duration:3.040,ease:"none"},6.92);
+tl.set("#cam",{scale:1},9.96);
+tl.to("#cam",{scale:1.1,duration:2.580,ease:"power1.inOut"},9.96);
+tl.set("#cam",{scale:1.04},12.54);
+tl.to("#cam",{scale:1.16,duration:.3,ease:"power4.out"},14.3);
+tl.set("#cam",{scale:1},14.83);
+tl.to("#cam",{scale:1.08,duration:1.730,ease:"none"},14.83);
+tl.set("#cam",{scale:1.03},16.56);
+tl.set("#cam",{scale:1},19.54);
+tl.to("#cam",{scale:1.12,duration:3.150,ease:"power1.out"},19.54);
+
+// 1 hook
+rise("#hi",0);barIn("#nbar",1.31);slam("#nm",1.37);shake(1.37,9);
+// 2 who it is for
+rise("#agar",2.73);chip("#c1",3.53);chip("#c2",4.91);chip("#c3",6.03);
+// 3 expenses
+slam("#mo1",7.29);slam("#mo2",7.59);shake(7.29,8);
+tl.fromTo("#chart",{y:380},{y:0,duration:.3,ease:"power4.out"},8.48);
+[["#h1",.95],["#h2",.5],["#h3",.28],["#h4",.72]].forEach(([s,v])=>{tl.set(s,{scaleY:v},8.48);tl.to(s,{scaleY:.62,duration:.42,ease:"power3.inOut"},8.93);});
+slam("#bal",8.93);
+// 4 hero: work from home, words land on her voice
+slam("#w1",10.22);shake(10.22,12);slam("#w2",10.38);slam("#w3",10.54);shake(10.54,10);rise("#sr",10.84);
+// 5 opportunity, the rays arrive with the word
+rise("#mn",12.54);rise("#ba",13.6);barIn("#obar",14.23);slam("#opp",14.3);
+tl.fromTo("#rays",{scale:.2,opacity:0,rotation:0},{scale:1,opacity:.92,rotation:30,duration:.32,ease:"power4.out"},14.3);
+tl.to("#rays",{rotation:60,duration:0.210,ease:"none"},14.620);
+// 6 nothing to do
+slam("#k1",14.9);slam("#k2",15.86);shake(15.86,12);slam("#kh",16.1);
+// 7 the click sets off the form
+rise("#bl",16.56);
+tl.fromTo("#phone",{y:900},{y:0,duration:.34,ease:"power4.out"},16.56);
+tl.fromTo("#cur",{x:420,y:300},{x:0,y:0,duration:1.260,ease:"power3.inOut"},16.56);
+tl.to("#cur",{scale:.82,duration:.07,ease:"power2.in"},17.830);
+tl.to("#cur",{scale:1,duration:.14,ease:"back.out(1.7)"},17.9);
+tl.to("#btn",{scale:.92,duration:.07,ease:"power2.in"},17.830);
+tl.to("#btn",{scale:1,duration:.14,ease:"back.out(1.7)"},17.9);
+tl.fromTo("#rip",{scale:.2,opacity:1},{scale:1.5,opacity:0,duration:.55,ease:"power2.out"},17.9);
+rise("#ck",17.9);rise("#ff",18.44);
+tl.set("#f1",{scaleX:0},0);tl.set("#f2",{scaleX:0},0);
+tl.to("#f1",{scaleX:1,duration:.34,ease:"power2.out"},18.44);tl.to("#f2",{scaleX:1,duration:.34,ease:"power2.out"},18.79);
+// 8 move ahead
+barIn("#mbar",19.92);slam("#mv",19.92);
+tl.fromTo("#ar",{x:-900},{x:0,duration:.3,ease:"power4.out"},20.26);
+tl.to("#ar",{x:260,duration:2.130,ease:"none"},20.560);
+rise("#cta",21.390);
+// whips carry the eye left across each new idea
+tl.fromTo("#whip0",{x:1300},{x:-1300,duration:.26,ease:"none"},6.800);
+tl.fromTo("#whip1",{x:1300},{x:-1300,duration:.26,ease:"none"},9.840);
+tl.fromTo("#whip2",{x:1300},{x:-1300,duration:.26,ease:"none"},14.710);
+tl.fromTo("#whip3",{x:1300},{x:-1300,duration:.26,ease:"none"},19.420);
+
+window.__timelines["main"]=tl;tl.seek(0);
+</script></body></html>
